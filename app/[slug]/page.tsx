@@ -1,10 +1,16 @@
 import Link from "next/link";
-import { Check } from "lucide-react";
 import { notFound } from "next/navigation";
 import type { Metadata } from "next";
 import Header from "../components/Header";
 import Footer from "../components/Footer";
 import { PRODUCTS } from "../lib/defaults";
+import { getSections } from "../lib/supabase";
+import { SectionHero } from "../components/sections/SectionHero";
+import { SectionFeatures } from "../components/sections/SectionFeatures";
+import { SectionPricing } from "../components/sections/SectionPricing";
+import { SectionReviews } from "../components/sections/SectionReviews";
+import { SectionFAQ } from "../components/sections/SectionFAQ";
+import { SectionCTA } from "../components/sections/SectionCTA";
 
 interface Props {
   params: Promise<{ slug: string }>;
@@ -18,9 +24,14 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const { slug } = await params;
   const product = PRODUCTS.find((p) => p.slug === slug);
   if (!product) return {};
+
+  const sections = await getSections(slug, "ru");
+  const meta = sections.meta as { title?: string; description?: string; keywords?: string } | undefined;
+
   return {
-    title: `${product.name} — Ezze`,
-    description: product.description,
+    title: meta?.title || `${product.name} — Ezze`,
+    description: meta?.description || product.description,
+    ...(meta?.keywords ? { keywords: meta.keywords } : {}),
   };
 }
 
@@ -29,74 +40,39 @@ export default async function ProductPage({ params }: Props) {
   const product = PRODUCTS.find((p) => p.slug === slug);
   if (!product) notFound();
 
-  const Icon = product.icon;
+  const sections = await getSections(slug, "ru");
 
   return (
     <>
       <Header />
       <main className="flex-1">
-        {/* Hero */}
-        <section
-          className={`bg-gradient-to-br ${product.color} py-24 px-4 text-white`}
-        >
-          <div className="max-w-4xl mx-auto text-center">
-            <div className="flex justify-center mb-6">
-              <div className="w-24 h-24 rounded-3xl bg-white/20 flex items-center justify-center">
-                <Icon size={56} className="text-white" />
-              </div>
-            </div>
-            <div className="flex items-center justify-center gap-3 mb-4">
-              <h1 className="text-4xl md:text-5xl font-bold">{product.name}</h1>
-              {product.comingSoon && (
-                <span className="bg-white/20 text-white text-sm px-3 py-1 rounded-full">
-                  Скоро
-                </span>
-              )}
-            </div>
-            <p className="text-xl text-white/80 mb-10 max-w-2xl mx-auto">
-              {product.description}
-            </p>
-            {!product.comingSoon ? (
-              <Link
-                href={product.url}
-                className="bg-white text-gray-900 px-8 py-4 rounded-xl text-lg font-bold hover:bg-gray-50 transition-colors inline-block"
-              >
-                Открыть приложение
-              </Link>
-            ) : (
-              <div className="bg-white/20 text-white px-8 py-4 rounded-xl text-lg font-medium inline-block">
-                Ожидается запуск в 2025 году
-              </div>
-            )}
-          </div>
-        </section>
+        <SectionHero
+          content={sections.hero || {}}
+          fallback={{
+            title: product.name,
+            subtitle: product.description,
+            color: product.color,
+            url: product.url,
+            icon: product.icon,
+            comingSoon: product.comingSoon,
+          }}
+        />
 
-        {/* Features */}
-        <section className="py-20 px-4 bg-white">
-          <div className="max-w-4xl mx-auto">
-            <h2 className="text-3xl font-bold text-center text-gray-900 mb-12">
-              Возможности
-            </h2>
-            <div className="grid grid-cols-2 md:grid-cols-4 gap-6">
-              {product.features.map((feature) => (
-                <div
-                  key={feature}
-                  className="bg-gray-50 rounded-xl p-6 text-center"
-                >
-                  <div className="flex justify-center mb-3">
-                    <Check size={28} className="text-indigo-500" />
-                  </div>
-                  <div className="font-medium text-gray-800 text-sm">
-                    {feature}
-                  </div>
-                </div>
-              ))}
-            </div>
-          </div>
-        </section>
+        <SectionFeatures
+          content={sections.features || {}}
+          fallbackItems={product.features}
+        />
+
+        <SectionPricing content={sections.pricing || {}} />
+
+        <SectionReviews content={sections.reviews || {}} />
+
+        <SectionFAQ content={sections.faq || {}} />
+
+        <SectionCTA content={sections.cta || {}} />
 
         {/* Back */}
-        <section className="py-12 px-4 text-center">
+        <section className="py-12 px-4 text-center bg-white">
           <Link
             href="/"
             className="text-indigo-600 hover:text-indigo-700 font-medium"

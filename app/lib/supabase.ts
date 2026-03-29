@@ -1,9 +1,11 @@
 import { createClient } from "@supabase/supabase-js";
 
-const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL!;
-const supabaseAnonKey = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!;
+const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL || "";
+const supabaseAnonKey = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY || "";
 
-export const supabase = createClient(supabaseUrl, supabaseAnonKey);
+export const supabase = supabaseUrl && supabaseAnonKey
+  ? createClient(supabaseUrl, supabaseAnonKey)
+  : null as unknown as ReturnType<typeof createClient>;
 
 export interface LandingSection {
   id: string;
@@ -19,14 +21,19 @@ export async function getSections(
   product: string,
   lang = "ru"
 ): Promise<Record<string, Record<string, unknown>>> {
-  const { data } = await supabase
-    .from("landing_sections")
-    .select("section, content")
-    .eq("product", product)
-    .eq("lang", lang)
-    .eq("visible", true)
-    .order("sort");
+  try {
+    if (!supabase) return {};
+    const { data, error } = await supabase
+      .from("landing_sections")
+      .select("section, content")
+      .eq("product", product)
+      .eq("lang", lang)
+      .eq("visible", true)
+      .order("sort");
 
-  if (!data) return {};
-  return Object.fromEntries(data.map((r) => [r.section, r.content]));
+    if (error || !data) return {};
+    return Object.fromEntries(data.map((r) => [r.section, r.content]));
+  } catch {
+    return {};
+  }
 }
