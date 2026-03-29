@@ -39,4 +39,4 @@ jobs:
           strip_components: 1
 
       - name: Notify success
-        run: echo "✅ Deployed successfully to https://ezze.site"
+        run: echo "Deployed successfully to https://ezze.site"
