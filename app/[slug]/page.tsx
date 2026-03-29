@@ -1,4 +1,5 @@
 import Link from "next/link";
+import { Check } from "lucide-react";
 import { notFound } from "next/navigation";
 import type { Metadata } from "next";
 import Header from "../components/Header";
@@ -28,6 +29,8 @@ export default async function ProductPage({ params }: Props) {
   const product = PRODUCTS.find((p) => p.slug === slug);
   if (!product) notFound();
 
+  const Icon = product.icon;
+
   return (
     <>
       <Header />
@@ -37,7 +40,11 @@ export default async function ProductPage({ params }: Props) {
           className={`bg-gradient-to-br ${product.color} py-24 px-4 text-white`}
         >
           <div className="max-w-4xl mx-auto text-center">
-            <div className="text-6xl mb-6">{product.icon}</div>
+            <div className="flex justify-center mb-6">
+              <div className="w-24 h-24 rounded-3xl bg-white/20 flex items-center justify-center">
+                <Icon size={56} className="text-white" />
+              </div>
+            </div>
             <div className="flex items-center justify-center gap-3 mb-4">
               <h1 className="text-4xl md:text-5xl font-bold">{product.name}</h1>
               {product.comingSoon && (
@@ -76,7 +83,9 @@ export default async function ProductPage({ params }: Props) {
                   key={feature}
                   className="bg-gray-50 rounded-xl p-6 text-center"
                 >
-                  <div className="text-3xl mb-3">✓</div>
+                  <div className="flex justify-center mb-3">
+                    <Check size={28} className="text-indigo-500" />
+                  </div>
                   <div className="font-medium text-gray-800 text-sm">
                     {feature}
                   </div>

@@ -1,4 +1,5 @@
 import Link from "next/link";
+import { Zap, Check } from "lucide-react";
 import Header from "./components/Header";
 import Footer from "./components/Footer";
 import { PRODUCTS, STATS } from "./lib/defaults";
@@ -12,7 +13,7 @@ export default function HomePage() {
         <section className="bg-gradient-to-br from-indigo-50 via-white to-purple-50 py-24 px-4">
           <div className="max-w-4xl mx-auto text-center">
             <div className="inline-flex items-center gap-2 bg-indigo-100 text-indigo-700 text-sm font-medium px-4 py-1.5 rounded-full mb-6">
-              <span>⚡</span>
+              <Zap size={14} />
               <span>Экосистема для вашего бизнеса</span>
             </div>
             <h1 className="text-4xl md:text-6xl font-bold text-gray-900 mb-6 leading-tight">
@@ -67,40 +68,43 @@ export default function HomePage() {
             </div>
 
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-              {PRODUCTS.map((product) => (
-                <Link
-                  key={product.slug}
-                  href={`/${product.slug}`}
-                  className="group bg-white rounded-2xl p-6 border border-gray-100 hover:border-indigo-200 hover:shadow-lg transition-all"
-                >
-                  <div
-                    className={`w-12 h-12 rounded-xl bg-gradient-to-br ${product.color} flex items-center justify-center text-2xl mb-4`}
+              {PRODUCTS.map((product) => {
+                const Icon = product.icon;
+                return (
+                  <Link
+                    key={product.slug}
+                    href={`/${product.slug}`}
+                    className="group bg-white rounded-2xl p-6 border border-gray-100 hover:border-indigo-200 hover:shadow-lg transition-all"
                   >
-                    {product.icon}
-                  </div>
-                  <div className="flex items-center gap-2 mb-2">
-                    <h3 className="font-bold text-gray-900">{product.name}</h3>
-                    {product.comingSoon && (
-                      <span className="text-xs bg-gray-100 text-gray-500 px-2 py-0.5 rounded-full">
-                        Скоро
-                      </span>
-                    )}
-                  </div>
-                  <p className="text-sm text-gray-600 mb-4">
-                    {product.description}
-                  </p>
-                  <ul className="space-y-1">
-                    {product.features.map((f) => (
-                      <li
-                        key={f}
-                        className="text-xs text-gray-500 flex items-center gap-1.5"
-                      >
-                        <span className="text-indigo-400">✓</span> {f}
-                      </li>
-                    ))}
-                  </ul>
-                </Link>
-              ))}
+                    <div
+                      className={`w-12 h-12 rounded-xl bg-gradient-to-br ${product.color} flex items-center justify-center mb-4`}
+                    >
+                      <Icon size={24} className="text-white" />
+                    </div>
+                    <div className="flex items-center gap-2 mb-2">
+                      <h3 className="font-bold text-gray-900">{product.name}</h3>
+                      {product.comingSoon && (
+                        <span className="text-xs bg-gray-100 text-gray-500 px-2 py-0.5 rounded-full">
+                          Скоро
+                        </span>
+                      )}
+                    </div>
+                    <p className="text-sm text-gray-600 mb-4">
+                      {product.description}
+                    </p>
+                    <ul className="space-y-1">
+                      {product.features.map((f) => (
+                        <li
+                          key={f}
+                          className="text-xs text-gray-500 flex items-center gap-1.5"
+                        >
+                          <Check size={12} className="text-indigo-400 shrink-0" /> {f}
+                        </li>
+                      ))}
+                    </ul>
+                  </Link>
+                );
+              })}
             </div>
           </div>
         </section>

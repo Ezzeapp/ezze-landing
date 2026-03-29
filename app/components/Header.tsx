@@ -1,11 +1,12 @@
 import Link from "next/link";
+import { Zap } from "lucide-react";
 
 export default function Header() {
   return (
     <header className="sticky top-0 z-50 bg-white/90 backdrop-blur border-b border-gray-100">
       <div className="max-w-6xl mx-auto px-4 h-16 flex items-center justify-between">
         <Link href="/" className="flex items-center gap-2 font-bold text-xl text-indigo-600">
-          <span className="text-2xl">⚡</span>
+          <Zap size={22} />
           <span>Ezze</span>
         </Link>
 

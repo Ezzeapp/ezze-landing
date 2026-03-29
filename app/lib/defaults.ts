@@ -1,11 +1,23 @@
-// Дефолтный контент — используется если в Supabase ничего нет
+import { Scissors, Shirt, Stethoscope, Leaf, GraduationCap, UtensilsCrossed } from "lucide-react";
+import type { LucideIcon } from "lucide-react";
 
-export const PRODUCTS = [
+export interface Product {
+  slug: string;
+  name: string;
+  description: string;
+  icon: LucideIcon;
+  color: string;
+  url: string;
+  features: string[];
+  comingSoon?: boolean;
+}
+
+export const PRODUCTS: Product[] = [
   {
     slug: "beauty",
     name: "Ezze Beauty",
     description: "Платформа для мастеров красоты, тренеров и самозанятых специалистов",
-    icon: "💄",
+    icon: Scissors,
     color: "from-pink-500 to-purple-600",
     url: "https://pro.ezze.site",
     features: ["Онлайн-запись", "Клиентская база", "Расписание", "Статистика"],
@@ -14,7 +26,7 @@ export const PRODUCTS = [
     slug: "workshop",
     name: "Ezze Workshop",
     description: "Управление химчисткой, ателье, ремонтными мастерскими",
-    icon: "👕",
+    icon: Shirt,
     color: "from-blue-500 to-cyan-600",
     url: "https://workshop.ezze.site",
     features: ["Приём заказов", "Трекинг статуса", "SMS-уведомления", "Склад"],
@@ -24,7 +36,7 @@ export const PRODUCTS = [
     slug: "clinic",
     name: "Ezze Clinic",
     description: "Медицинские клиники, лаборатории и аптеки",
-    icon: "🏥",
+    icon: Stethoscope,
     color: "from-green-500 to-teal-600",
     url: "https://clinic.ezze.site",
     features: ["Электронная карта", "Запись к врачу", "Лаборатория", "Аптека"],
@@ -34,7 +46,7 @@ export const PRODUCTS = [
     slug: "farm",
     name: "Ezze Farm",
     description: "Управление сельскохозяйственным бизнесом",
-    icon: "🌾",
+    icon: Leaf,
     color: "from-yellow-500 to-orange-600",
     url: "https://farm.ezze.site",
     features: ["Учёт урожая", "Склад", "Продажи", "Аналитика"],
@@ -44,7 +56,7 @@ export const PRODUCTS = [
     slug: "edu",
     name: "Ezze Edu",
     description: "Учебные центры, школы и онлайн-курсы",
-    icon: "🎓",
+    icon: GraduationCap,
     color: "from-indigo-500 to-blue-600",
     url: "https://edu.ezze.site",
     features: ["Расписание", "Ученики", "Оплата", "Прогресс"],
@@ -54,7 +66,7 @@ export const PRODUCTS = [
     slug: "food",
     name: "Ezze Food",
     description: "Кафе, рестораны и службы доставки еды",
-    icon: "🍕",
+    icon: UtensilsCrossed,
     color: "from-red-500 to-orange-600",
     url: "https://food.ezze.site",
     features: ["Меню", "Заказы", "Доставка", "Столики"],

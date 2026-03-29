@@ -1,4 +1,5 @@
 import Link from "next/link";
+import { Zap } from "lucide-react";
 
 export default function Footer() {
   return (
@@ -7,7 +8,7 @@ export default function Footer() {
         <div className="grid grid-cols-2 md:grid-cols-4 gap-8 mb-8">
           <div className="col-span-2 md:col-span-1">
             <div className="flex items-center gap-2 font-bold text-xl text-white mb-3">
-              <span>⚡</span>
+              <Zap size={20} />
               <span>Ezze</span>
             </div>
             <p className="text-sm">
