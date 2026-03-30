@@ -15,15 +15,29 @@ export const metadata: Metadata = {
   },
 };
 
-// Dynamic favicon — reads platform_favicon_color from app_settings (Supabase)
+// Dynamic color + favicon — reads platform_color from app_settings (Supabase)
 // Caches in localStorage so the correct color shows instantly on subsequent visits
 const SUPABASE_URL = process.env.NEXT_PUBLIC_SUPABASE_URL ?? "https://ezze.site";
 const ANON_KEY = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY ?? "";
 
-const faviconScript = `(function(){
+const platformScript = `(function(){
   var DEFAULT_COLOR = '#6366f1';
+  var DEFAULT_SHADES = {50:'#eef2ff',100:'#e0e7ff',300:'#a5b4fc',500:'#6366f1',600:'#4f46e5',700:'#4338ca'};
+
+  function applyColor(shades) {
+    var el = document.documentElement;
+    // Override Tailwind v4 indigo CSS variables with platform color
+    el.style.setProperty('--color-indigo-50',  shades[50]  || shades['50']);
+    el.style.setProperty('--color-indigo-100', shades[100] || shades['100']);
+    el.style.setProperty('--color-indigo-300', shades[300] || shades['300']);
+    el.style.setProperty('--color-indigo-500', shades[500] || shades['500']);
+    el.style.setProperty('--color-indigo-600', shades[600] || shades['600']);
+    el.style.setProperty('--color-indigo-700', shades[700] || shades['700']);
+    el.style.setProperty('--primary', shades[500] || shades['500']);
+  }
+
   function makeFavicon(color) {
-    var svg = '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32" fill="none">'
+    var svg = '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32" width="32" height="32" fill="none">'
       + '<rect width="32" height="32" rx="8" fill="' + color + '"/>'
       + '<polygon points="17.3,2.7 4,18.7 16,18.7 14.7,29.3 28,13.3 16,13.3" fill="white"/>'
       + '</svg>';
@@ -39,20 +53,27 @@ const faviconScript = `(function(){
       document.head.appendChild(link);
     } catch(e){}
   }
-  var cached = '';
-  try { cached = localStorage.getItem('ezze_favicon_color') || ''; } catch(e){}
+
+  // Apply from cache immediately (before DOMContentLoaded)
+  var cached = null;
+  try { var s = localStorage.getItem('ezze_platform_color'); if(s) cached = JSON.parse(s); } catch(e){}
+  if (cached) applyColor(cached);
+
   document.addEventListener('DOMContentLoaded', function(){
-    setFavicon(cached || DEFAULT_COLOR);
+    applyColor(cached || DEFAULT_SHADES);
+    setFavicon((cached && (cached[500] || cached['500'])) || DEFAULT_COLOR);
+
     // Fetch latest from Supabase in background
     var url = '${SUPABASE_URL}';
     var key = '${ANON_KEY}';
     if (!key) return;
-    fetch(url + '/rest/v1/app_settings?key=eq.platform_favicon_color&select=value&limit=1', {
+    fetch(url + '/rest/v1/app_settings?key=eq.platform_color&select=value&limit=1', {
       headers: { 'apikey': key, 'Authorization': 'Bearer ' + key }
     }).then(function(r){ return r.json(); }).then(function(d){
-      var color = d && d[0] && d[0].value ? d[0].value : DEFAULT_COLOR;
-      try { localStorage.setItem('ezze_favicon_color', color); } catch(e){}
-      setFavicon(color);
+      var shades = (d && d[0] && d[0].value && typeof d[0].value === 'object') ? d[0].value : DEFAULT_SHADES;
+      try { localStorage.setItem('ezze_platform_color', JSON.stringify(shades)); } catch(e){}
+      applyColor(shades);
+      setFavicon(shades[500] || shades['500'] || DEFAULT_COLOR);
     }).catch(function(){});
   });
 })();`;
@@ -66,7 +87,7 @@ export default function RootLayout({
     <html lang="ru" className="h-full">
       <head>
         {/* eslint-disable-next-line @next/next/no-sync-scripts */}
-        <script dangerouslySetInnerHTML={{ __html: faviconScript }} />
+        <script dangerouslySetInnerHTML={{ __html: platformScript }} />
       </head>
       <body className="min-h-full flex flex-col antialiased">{children}</body>
     </html>
