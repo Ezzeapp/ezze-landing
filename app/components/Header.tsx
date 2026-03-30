@@ -55,16 +55,15 @@ function HeaderInner() {
 
         <div className="flex items-center gap-2">
           {/* Language switcher */}
-          <div className="hidden sm:flex items-center gap-0.5 mr-1">
+          <select
+            value={lang}
+            onChange={(e) => switchLang(e.target.value as Lang)}
+            className="hidden sm:block text-xs px-2 py-1 rounded-lg border border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-900 text-gray-700 dark:text-gray-300 font-medium cursor-pointer focus:outline-none focus:ring-2 focus:ring-indigo-500 mr-1"
+          >
             {LANGS.map((l) => (
-              <button key={l} onClick={() => switchLang(l)}
-                className={`text-xs px-1.5 py-1 rounded font-medium transition-colors ${lang === l
-                  ? "bg-indigo-100 text-indigo-700 dark:bg-indigo-900/50 dark:text-indigo-300"
-                  : "text-gray-500 hover:text-gray-900 dark:text-gray-400 dark:hover:text-white"}`}>
-                {LANG_LABELS[l]}
-              </button>
+              <option key={l} value={l}>{LANG_LABELS[l]}</option>
             ))}
-          </div>
+          </select>
 
           {/* Theme toggle */}
           <button onClick={toggleTheme} aria-label="Toggle theme"
