@@ -21,6 +21,9 @@ const SUPABASE_URL = process.env.NEXT_PUBLIC_SUPABASE_URL ?? "https://ezze.site"
 const ANON_KEY = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY ?? "";
 
 const platformScript = `(function(){
+  // Theme — apply immediately to prevent flash
+  try { if (localStorage.getItem('ezze_theme') === 'dark') document.documentElement.classList.add('dark'); } catch(e){}
+
   var DEFAULT_COLOR = '#6366f1';
   var DEFAULT_SHADES = {50:'#eef2ff',100:'#e0e7ff',300:'#a5b4fc',500:'#6366f1',600:'#4f46e5',700:'#4338ca'};
 
