@@ -26,14 +26,14 @@ const platformScript = `(function(){
 
   function applyColor(shades) {
     var el = document.documentElement;
-    // Override Tailwind v4 indigo CSS variables with platform color
-    el.style.setProperty('--color-indigo-50',  shades[50]  || shades['50']);
-    el.style.setProperty('--color-indigo-100', shades[100] || shades['100']);
-    el.style.setProperty('--color-indigo-300', shades[300] || shades['300']);
-    el.style.setProperty('--color-indigo-500', shades[500] || shades['500']);
-    el.style.setProperty('--color-indigo-600', shades[600] || shades['600']);
-    el.style.setProperty('--color-indigo-700', shades[700] || shades['700']);
-    el.style.setProperty('--primary', shades[500] || shades['500']);
+    // Override Tailwind v4 indigo CSS variables (keys are always strings after JSON.parse)
+    if (shades['50'])  el.style.setProperty('--color-indigo-50',  shades['50']);
+    if (shades['100']) el.style.setProperty('--color-indigo-100', shades['100']);
+    if (shades['300']) el.style.setProperty('--color-indigo-300', shades['300']);
+    if (shades['500']) el.style.setProperty('--color-indigo-500', shades['500']);
+    if (shades['600']) el.style.setProperty('--color-indigo-600', shades['600']);
+    if (shades['700']) el.style.setProperty('--color-indigo-700', shades['700']);
+    if (shades['500']) el.style.setProperty('--primary', shades['500']);
   }
 
   function makeFavicon(color) {
@@ -70,10 +70,17 @@ const platformScript = `(function(){
     fetch(url + '/rest/v1/app_settings?key=eq.platform_color&select=value&limit=1', {
       headers: { 'apikey': key, 'Authorization': 'Bearer ' + key }
     }).then(function(r){ return r.json(); }).then(function(d){
-      var shades = (d && d[0] && d[0].value && typeof d[0].value === 'object') ? d[0].value : DEFAULT_SHADES;
+      var raw = d && d[0] && d[0].value;
+      var shades = DEFAULT_SHADES;
+      if (raw) {
+        try {
+          // value is TEXT in DB — REST API may return it as string or object
+          shades = (typeof raw === 'string') ? JSON.parse(raw) : raw;
+        } catch(e) {}
+      }
       try { localStorage.setItem('ezze_platform_color', JSON.stringify(shades)); } catch(e){}
       applyColor(shades);
-      setFavicon(shades[500] || shades['500'] || DEFAULT_COLOR);
+      setFavicon(shades['500'] || DEFAULT_COLOR);
     }).catch(function(){});
   });
 })();`;
