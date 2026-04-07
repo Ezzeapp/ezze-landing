@@ -1,13 +1,14 @@
 "use client";
 import Link from "next/link";
-import { Zap, Sun, Moon } from "lucide-react";
+import { Zap, Sun, Moon, ChevronDown } from "lucide-react";
 import { useState, useEffect, Suspense } from "react";
 import { useRouter, useSearchParams, usePathname } from "next/navigation";
-import { type Lang, LANGS, LANG_LABELS, tr } from "../lib/i18n";
+import { type Lang, LANGS, LANG_LABELS, LANG_NAMES, tr } from "../lib/i18n";
 
 function HeaderInner() {
   const [isDark, setIsDark] = useState(false);
   const [lang, setLang] = useState<Lang>("ru");
+  const [langOpen, setLangOpen] = useState(false);
   const router = useRouter();
   const pathname = usePathname();
   const searchParams = useSearchParams();
@@ -31,6 +32,7 @@ function HeaderInner() {
 
   function switchLang(l: Lang) {
     setLang(l);
+    setLangOpen(false);
     localStorage.setItem("ezze_lang", l);
     const p = new URLSearchParams(searchParams.toString());
     p.set("lang", l);
@@ -55,15 +57,39 @@ function HeaderInner() {
 
         <div className="flex items-center gap-2">
           {/* Language switcher */}
-          <select
-            value={lang}
-            onChange={(e) => switchLang(e.target.value as Lang)}
-            className="hidden sm:block text-xs px-2 py-1 rounded-lg border border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-900 text-gray-700 dark:text-gray-300 font-medium cursor-pointer focus:outline-none focus:ring-2 focus:ring-indigo-500 mr-1"
-          >
-            {LANGS.map((l) => (
-              <option key={l} value={l}>{LANG_LABELS[l]}</option>
-            ))}
-          </select>
+          <div className="relative hidden sm:block mr-1">
+            <button
+              onClick={() => setLangOpen(!langOpen)}
+              className="flex items-center gap-1 text-xs px-2.5 py-1.5 rounded-lg border border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-900 text-gray-700 dark:text-gray-300 font-bold cursor-pointer hover:border-indigo-300 dark:hover:border-indigo-600 transition-colors"
+            >
+              {LANG_LABELS[lang]}
+              <ChevronDown size={11} className={`transition-transform ${langOpen ? "rotate-180" : ""}`} />
+            </button>
+
+            {langOpen && (
+              <>
+                {/* Backdrop */}
+                <div className="fixed inset-0 z-40" onClick={() => setLangOpen(false)} />
+                {/* Dropdown */}
+                <div className="absolute right-0 top-full mt-1.5 w-48 bg-white dark:bg-gray-900 border border-gray-200 dark:border-gray-700 rounded-xl shadow-lg z-50 py-1 overflow-hidden">
+                  {LANGS.map((l) => (
+                    <button
+                      key={l}
+                      onClick={() => switchLang(l)}
+                      className={`w-full flex items-center gap-3 px-3 py-2 text-sm transition-colors text-left ${
+                        l === lang
+                          ? "bg-indigo-50 dark:bg-indigo-900/30 text-indigo-600 dark:text-indigo-400"
+                          : "text-gray-700 dark:text-gray-300 hover:bg-gray-50 dark:hover:bg-gray-800"
+                      }`}
+                    >
+                      <span className="font-bold text-xs w-7 shrink-0">{LANG_LABELS[l]}</span>
+                      <span>{LANG_NAMES[l]}</span>
+                    </button>
+                  ))}
+                </div>
+              </>
+            )}
+          </div>
 
           {/* Theme toggle */}
           <button onClick={toggleTheme} aria-label="Toggle theme"

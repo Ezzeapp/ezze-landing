@@ -5,12 +5,23 @@ export const LANG_LABELS: Record<Lang, string> = {
   ru: "RU",
   en: "EN",
   uz: "UZ",
-  kz: "ҚАЗ",
-  uk: "УКР",
-  by: "БЕЛ",
-  ky: "КЫР",
-  tg: "ТОҶ",
-  kaa: "ҚҚ",
+  kz: "KZ",
+  uk: "UA",
+  by: "BY",
+  ky: "KG",
+  tg: "TJ",
+  kaa: "KK",
+};
+export const LANG_NAMES: Record<Lang, string> = {
+  ru: "Русский",
+  en: "English",
+  uz: "O'zbekcha",
+  kz: "Қазақша",
+  uk: "Українська",
+  by: "Беларуская",
+  ky: "Кыргызча",
+  tg: "Тоҷикӣ",
+  kaa: "Қарақалпақша",
 };
 
 export const tr: Record<Lang, Record<string, string>> = {
