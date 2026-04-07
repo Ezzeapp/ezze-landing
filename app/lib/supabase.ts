@@ -37,3 +37,25 @@ export async function getSections(
     return {};
   }
 }
+
+export async function getAppSettings(keys: string[]): Promise<Record<string, unknown>> {
+  try {
+    if (!supabase) return {};
+    const { data } = await supabase
+      .from("app_settings")
+      .select("key, value")
+      .in("key", keys);
+    if (!data) return {};
+    const result: Record<string, unknown> = {};
+    for (const row of data) {
+      try {
+        result[row.key] = typeof row.value === "string" ? JSON.parse(row.value) : row.value;
+      } catch {
+        result[row.key] = row.value;
+      }
+    }
+    return result;
+  } catch {
+    return {};
+  }
+}

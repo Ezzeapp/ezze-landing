@@ -1,13 +1,16 @@
 import Header from "./components/Header";
-import { getSections } from "./lib/supabase";
+import { getSections, getAppSettings } from "./lib/supabase";
 import { HomeContent } from "./components/HomeContent";
 
 export default async function HomePage() {
-  const sections = await getSections("main", "ru");
+  const [sections, settings] = await Promise.all([
+    getSections("main", "ru"),
+    getAppSettings(["products_config", "about_config", "contacts_config"]),
+  ]);
   return (
     <>
       <Header />
-      <HomeContent sections={sections} />
+      <HomeContent sections={sections} settings={settings} />
     </>
   );
 }

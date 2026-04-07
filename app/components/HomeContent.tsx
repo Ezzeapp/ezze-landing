@@ -1,7 +1,15 @@
 "use client";
 import Link from "next/link";
-import { Zap, Check, Smartphone, Gift } from "lucide-react";
-import { Suspense, useState, useEffect } from "react";
+import {
+  Zap, Check, Smartphone, Gift,
+  Globe, Scissors, Shirt, Stethoscope, Leaf, GraduationCap,
+  CalendarDays, UtensilsCrossed, Building2, Car, Hammer,
+  ShoppingBag, Heart, Dumbbell, Package, Truck, Camera,
+  Music, Dog, Flower2, Wrench, Cpu, BookOpen, Coffee, Bike,
+  Baby, Store, ClipboardList,
+} from "lucide-react";
+import type { LucideIcon } from "lucide-react";
+import { Suspense, useState, useEffect, useMemo } from "react";
 import { useSearchParams } from "next/navigation";
 import { PRODUCTS, STATS } from "../lib/defaults";
 import { SectionCTA } from "./sections/SectionCTA";
@@ -9,12 +17,44 @@ import { SectionPricing } from "./sections/SectionPricing";
 import Footer from "./Footer";
 import { type Lang, LANGS, tr } from "../lib/i18n";
 
-interface MainHero {
-  title?: string;
-  subtitle?: string;
-  badge?: string;
-  cta_primary?: string;
-  cta_secondary?: string;
+const ICON_MAP: Record<string, LucideIcon> = {
+  Globe, Scissors, Shirt, Stethoscope, Leaf, GraduationCap,
+  CalendarDays, UtensilsCrossed, Building2, Car, Hammer,
+  ShoppingBag, Heart, Dumbbell, Package, Truck, Camera,
+  Music, Dog, Flower2, Wrench, Cpu, BookOpen, Coffee, Bike,
+  Baby, Store, ClipboardList, Zap,
+};
+
+function getIcon(name: string): LucideIcon {
+  return ICON_MAP[name] ?? Globe;
+}
+
+interface ProductConfigItem {
+  slug: string;
+  label: string;
+  iconName: string;
+  url: string;
+  hidden: boolean;
+  comingSoon: boolean;
+}
+
+interface AboutConfig {
+  company_name?: string;
+  tagline?: string;
+  description?: string;
+  founded_year?: string;
+}
+
+interface ContactsConfig {
+  phone?: string;
+  phone2?: string;
+  email?: string;
+  address?: string;
+  telegram?: string;
+  instagram?: string;
+  facebook?: string;
+  youtube?: string;
+  website?: string;
 }
 
 interface MainStats {
@@ -28,9 +68,10 @@ interface Props {
     pricing?: Record<string, unknown>;
     cta?: Record<string, unknown>;
   };
+  settings?: Record<string, unknown>;
 }
 
-function HomeContentInner({ sections }: Props) {
+function HomeContentInner({ sections, settings }: Props) {
   const searchParams = useSearchParams();
   const [lang, setLang] = useState<Lang>("ru");
 
@@ -51,10 +92,9 @@ function HomeContentInner({ sections }: Props) {
 
   const t = tr[lang];
 
-  // Hero title/subtitle/badge always from i18n (fully translated for all 9 languages).
-  // DB hero content would be Russian-only and override translations for other languages.
-  const hero = (sections.hero || {}) as MainHero;
   const statsContent = (sections.stats || {}) as MainStats;
+  const aboutConfig = settings?.about_config as AboutConfig | undefined;
+  const contactsConfig = settings?.contacts_config as ContactsConfig | undefined;
 
   const heroBadge = t.hero_badge;
   const ctaPrimary = t.hero_cta1;
@@ -64,6 +104,29 @@ function HomeContentInner({ sections }: Props) {
     statsContent.items && statsContent.items.length > 0
       ? statsContent.items
       : STATS.map((s, i) => ({ value: s.value, label: t[`stat_label_${i}`] ?? s.label }));
+
+  // Products grid: use products_config from DB if available, else hardcoded defaults
+  const productList = useMemo(() => {
+    const configList = settings?.products_config as ProductConfigItem[] | undefined;
+    if (Array.isArray(configList) && configList.length > 0) {
+      return configList
+        .filter((c) => !c.hidden && c.slug !== "main")
+        .map((c) => {
+          const def = PRODUCTS.find((p) => p.slug === c.slug);
+          return {
+            slug: c.slug,
+            name: c.label,
+            description: def?.description || "",
+            icon: getIcon(c.iconName),
+            color: def?.color || "from-gray-500 to-gray-600",
+            url: c.url,
+            features: def?.features || [],
+            comingSoon: c.comingSoon,
+          };
+        });
+    }
+    return PRODUCTS;
+  }, [settings?.products_config]);
 
   return (
     <>
@@ -117,7 +180,7 @@ function HomeContentInner({ sections }: Props) {
               <p className="text-lg text-gray-600 dark:text-gray-400">{t.products_subtitle}</p>
             </div>
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-              {PRODUCTS.map((product) => {
+              {productList.map((product) => {
                 const Icon = product.icon;
                 return (
                   <Link
@@ -160,7 +223,9 @@ function HomeContentInner({ sections }: Props) {
         <section id="about" className="py-20 px-4 bg-gray-50 dark:bg-gray-900">
           <div className="max-w-4xl mx-auto text-center">
             <h2 className="text-3xl md:text-4xl font-bold text-gray-900 dark:text-white mb-4">{t.about_title}</h2>
-            <p className="text-lg text-gray-600 dark:text-gray-400 mb-12 max-w-2xl mx-auto">{t.about_subtitle}</p>
+            <p className="text-lg text-gray-600 dark:text-gray-400 mb-12 max-w-2xl mx-auto">
+              {aboutConfig?.description || t.about_subtitle}
+            </p>
             <div className="grid grid-cols-1 md:grid-cols-3 gap-6 text-left">
               <div className="bg-white dark:bg-gray-800 rounded-2xl p-6 border border-gray-100 dark:border-gray-700">
                 <div className="w-10 h-10 bg-indigo-100 dark:bg-indigo-900/40 rounded-xl flex items-center justify-center mb-4">
@@ -184,6 +249,11 @@ function HomeContentInner({ sections }: Props) {
                 <p className="text-sm text-gray-600 dark:text-gray-400">{t.about_f3_text}</p>
               </div>
             </div>
+            {aboutConfig?.founded_year && (
+              <p className="mt-8 text-sm text-gray-400 dark:text-gray-600">
+                {aboutConfig.company_name || "Ezze"} — {t.about_since || "с"} {aboutConfig.founded_year}
+              </p>
+            )}
           </div>
         </section>
 
@@ -198,15 +268,15 @@ function HomeContentInner({ sections }: Props) {
           }}
         />
       </main>
-      <Footer lang={lang} />
+      <Footer lang={lang} contacts={contactsConfig} />
     </>
   );
 }
 
-export function HomeContent({ sections }: Props) {
+export function HomeContent({ sections, settings }: Props) {
   return (
     <Suspense fallback={<main className="flex-1" />}>
-      <HomeContentInner sections={sections} />
+      <HomeContentInner sections={sections} settings={settings} />
     </Suspense>
   );
 }

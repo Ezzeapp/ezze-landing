@@ -2,8 +2,22 @@ import Link from "next/link";
 import { Zap } from "lucide-react";
 import { type Lang, tr } from "../lib/i18n";
 
-export default function Footer({ lang = "ru" }: { lang?: Lang }) {
+interface ContactsConfig {
+  telegram?: string;
+  email?: string;
+  instagram?: string;
+  youtube?: string;
+  phone?: string;
+}
+
+export default function Footer({ lang = "ru", contacts }: { lang?: Lang; contacts?: ContactsConfig }) {
   const t = tr[lang];
+  const telegram = contacts?.telegram || "https://t.me/ezzeapp";
+  const email = contacts?.email;
+  const instagram = contacts?.instagram;
+  const youtube = contacts?.youtube;
+  const phone = contacts?.phone;
+
   return (
     <footer className="bg-gray-900 dark:bg-black text-gray-400 mt-auto">
       <div className="max-w-6xl mx-auto px-4 py-12">
@@ -34,7 +48,21 @@ export default function Footer({ lang = "ru" }: { lang?: Lang }) {
           <div>
             <h4 className="text-white font-medium mb-3 text-sm">{t.footer_contacts}</h4>
             <ul className="space-y-2 text-sm">
-              <li><a href="https://t.me/ezzeapp" className="hover:text-white transition-colors">Telegram</a></li>
+              {telegram && (
+                <li><a href={telegram} target="_blank" rel="noopener noreferrer" className="hover:text-white transition-colors">Telegram</a></li>
+              )}
+              {instagram && (
+                <li><a href={instagram} target="_blank" rel="noopener noreferrer" className="hover:text-white transition-colors">Instagram</a></li>
+              )}
+              {youtube && (
+                <li><a href={youtube} target="_blank" rel="noopener noreferrer" className="hover:text-white transition-colors">YouTube</a></li>
+              )}
+              {email && (
+                <li><a href={`mailto:${email}`} className="hover:text-white transition-colors">{email}</a></li>
+              )}
+              {phone && (
+                <li><a href={`tel:${phone}`} className="hover:text-white transition-colors">{phone}</a></li>
+              )}
             </ul>
           </div>
         </div>
