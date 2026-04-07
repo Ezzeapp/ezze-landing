@@ -1,4 +1,5 @@
 import Link from "next/link";
+import { type Lang, tr } from "../../lib/i18n";
 
 interface CTAContent {
   title?: string;
@@ -9,6 +10,7 @@ interface CTAContent {
 
 interface Props {
   content: Record<string, unknown>;
+  lang?: Lang;
   fallback?: {
     title?: string;
     subtitle?: string;
@@ -17,11 +19,12 @@ interface Props {
   };
 }
 
-export function SectionCTA({ content, fallback }: Props) {
+export function SectionCTA({ content, lang = "ru", fallback }: Props) {
   const c = content as CTAContent;
-  const title = c.title || fallback?.title || "Готовы начать?";
-  const subtitle = c.subtitle || fallback?.subtitle || "Бесплатный тариф навсегда. Никаких кредитных карт.";
-  const buttonText = c.button_text || fallback?.button_text || "Создать аккаунт бесплатно";
+  const t = tr[lang];
+  const title = c.title || fallback?.title || t.cta_title;
+  const subtitle = c.subtitle || fallback?.subtitle || t.cta_subtitle;
+  const buttonText = c.button_text || fallback?.button_text || t.cta_button;
   const buttonUrl = c.button_url || fallback?.button_url || "https://pro.ezze.site/register";
 
   return (

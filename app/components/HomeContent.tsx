@@ -189,6 +189,7 @@ function HomeContentInner({ sections }: Props) {
 
         <SectionCTA
           content={sections.cta || {}}
+          lang={lang}
           fallback={{
             title: t.cta_title,
             subtitle: t.cta_subtitle,

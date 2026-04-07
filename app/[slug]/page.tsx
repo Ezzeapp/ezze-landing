@@ -5,12 +5,14 @@ import Header from "../components/Header";
 import Footer from "../components/Footer";
 import { PRODUCTS } from "../lib/defaults";
 import { getSections } from "../lib/supabase";
+import { tr } from "../lib/i18n";
 import { SectionHero } from "../components/sections/SectionHero";
 import { SectionFeatures } from "../components/sections/SectionFeatures";
 import { SectionPricing } from "../components/sections/SectionPricing";
 import { SectionReviews } from "../components/sections/SectionReviews";
 import { SectionFAQ } from "../components/sections/SectionFAQ";
 import { SectionCTA } from "../components/sections/SectionCTA";
+import BackLink from "../components/BackLink";
 
 interface Props {
   params: Promise<{ slug: string }>;
@@ -71,14 +73,9 @@ export default async function ProductPage({ params }: Props) {
 
         <SectionCTA content={sections.cta || {}} />
 
-        {/* Back */}
+        {/* Back — client component reads lang from URL */}
         <section className="py-12 px-4 text-center bg-white dark:bg-gray-950">
-          <Link
-            href="/"
-            className="text-indigo-600 dark:text-indigo-400 hover:text-indigo-700 dark:hover:text-indigo-300 font-medium"
-          >
-            ← Все продукты Ezze
-          </Link>
+          <BackLink />
         </section>
       </main>
       <Footer />

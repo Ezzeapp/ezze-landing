@@ -1,5 +1,6 @@
 import Link from "next/link";
 import type { LucideIcon } from "lucide-react";
+import { type Lang, tr } from "../../lib/i18n";
 
 interface HeroContent {
   title?: string;
@@ -11,6 +12,7 @@ interface HeroContent {
 
 interface Props {
   content: Record<string, unknown>;
+  lang?: Lang;
   fallback: {
     title: string;
     subtitle: string;
@@ -21,11 +23,12 @@ interface Props {
   };
 }
 
-export function SectionHero({ content, fallback }: Props) {
+export function SectionHero({ content, lang = "ru", fallback }: Props) {
   const c = content as HeroContent;
+  const t = tr[lang];
   const title = c.title || fallback.title;
   const subtitle = c.subtitle || fallback.subtitle;
-  const ctaText = c.cta_text || "Открыть приложение";
+  const ctaText = c.cta_text || t.open_app;
   const ctaUrl = c.cta_url || fallback.url;
   const badge = c.badge;
   const Icon = fallback.icon;
@@ -47,7 +50,7 @@ export function SectionHero({ content, fallback }: Props) {
           <h1 className="text-4xl md:text-5xl font-bold">{title}</h1>
           {fallback.comingSoon && (
             <span className="bg-white/20 text-white text-sm px-3 py-1 rounded-full">
-              Скоро
+              {t.coming_soon}
             </span>
           )}
         </div>
@@ -61,7 +64,7 @@ export function SectionHero({ content, fallback }: Props) {
           </Link>
         ) : (
           <div className="bg-white/20 text-white px-8 py-4 rounded-xl text-lg font-medium inline-block">
-            Ожидается запуск
+            {t.awaiting_launch}
           </div>
         )}
       </div>
