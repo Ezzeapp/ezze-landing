@@ -36,12 +36,12 @@ function HomeContentInner({ sections }: Props) {
   const lang = (LANGS.includes(langParam as Lang) ? langParam : "ru") as Lang;
   const t = tr[lang];
 
+  // Hero title/subtitle/badge always from i18n (fully translated for all 9 languages).
+  // DB hero content would be Russian-only and override translations for other languages.
   const hero = (sections.hero || {}) as MainHero;
   const statsContent = (sections.stats || {}) as MainStats;
 
-  const heroTitle = hero.title || `${t.hero_title} ${t.hero_title_accent}`;
-  const heroSubtitle = hero.subtitle || t.hero_subtitle;
-  const heroBadge = hero.badge || t.hero_badge;
+  const heroBadge = t.hero_badge;
   const ctaPrimary = hero.cta_primary || t.hero_cta1;
   const ctaSecondary = hero.cta_secondary || t.hero_cta2;
 
@@ -61,16 +61,10 @@ function HomeContentInner({ sections }: Props) {
               <span>{heroBadge}</span>
             </div>
             <h1 className="text-4xl md:text-6xl font-bold text-gray-900 dark:text-white mb-6 leading-tight">
-              {heroTitle.includes(t.hero_title_accent) ? (
-                <>
-                  {t.hero_title}{" "}
-                  <span className="text-indigo-600 dark:text-indigo-400">{t.hero_title_accent}</span>
-                </>
-              ) : (
-                heroTitle
-              )}
+              {t.hero_title}{" "}
+              <span className="text-indigo-600 dark:text-indigo-400">{t.hero_title_accent}</span>
             </h1>
-            <p className="text-xl text-gray-600 dark:text-gray-400 mb-10 max-w-2xl mx-auto">{heroSubtitle}</p>
+            <p className="text-xl text-gray-600 dark:text-gray-400 mb-10 max-w-2xl mx-auto">{t.hero_subtitle}</p>
             <div className="flex flex-col sm:flex-row gap-4 justify-center">
               <Link
                 href="https://pro.ezze.site/register"
