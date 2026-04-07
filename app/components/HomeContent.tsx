@@ -12,6 +12,7 @@ import type { LucideIcon } from "lucide-react";
 import { Suspense, useState, useEffect, useMemo } from "react";
 import { useSearchParams } from "next/navigation";
 import { PRODUCTS, STATS } from "../lib/defaults";
+import { getAppSettings } from "../lib/supabase";
 import { SectionCTA } from "./sections/SectionCTA";
 import { SectionPricing } from "./sections/SectionPricing";
 import Footer from "./Footer";
@@ -71,9 +72,10 @@ interface Props {
   settings?: Record<string, unknown>;
 }
 
-function HomeContentInner({ sections, settings }: Props) {
+function HomeContentInner({ sections, settings: initialSettings }: Props) {
   const searchParams = useSearchParams();
   const [lang, setLang] = useState<Lang>("ru");
+  const [settings, setSettings] = useState<Record<string, unknown>>(initialSettings || {});
 
   useEffect(() => {
     const sp = searchParams.get("lang") as Lang | null;
@@ -88,6 +90,13 @@ function HomeContentInner({ sections, settings }: Props) {
     };
     window.addEventListener("ezze_lang_change", handler);
     return () => window.removeEventListener("ezze_lang_change", handler);
+  }, []);
+
+  // Fetch fresh settings from Supabase at runtime (so changes from superadmin apply without rebuild)
+  useEffect(() => {
+    getAppSettings(["products_config", "about_config", "contacts_config"])
+      .then((data) => { if (Object.keys(data).length > 0) setSettings(data); })
+      .catch(() => {});
   }, []);
 
   const t = tr[lang];
