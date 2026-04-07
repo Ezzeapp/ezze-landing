@@ -5,6 +5,7 @@ import { Suspense } from "react";
 import { useSearchParams } from "next/navigation";
 import { PRODUCTS, STATS } from "../lib/defaults";
 import { SectionCTA } from "./sections/SectionCTA";
+import { SectionPricing } from "./sections/SectionPricing";
 import Footer from "./Footer";
 import { type Lang, LANGS, tr } from "../lib/i18n";
 
@@ -24,6 +25,7 @@ interface Props {
   sections: {
     hero?: Record<string, unknown>;
     stats?: Record<string, unknown>;
+    pricing?: Record<string, unknown>;
     cta?: Record<string, unknown>;
   };
 }
@@ -139,6 +141,11 @@ function HomeContentInner({ sections }: Props) {
             </div>
           </div>
         </section>
+
+        {/* Pricing */}
+        {sections.pricing && (
+          <SectionPricing content={sections.pricing} />
+        )}
 
         <SectionCTA
           content={sections.cta || {}}
