@@ -72,10 +72,10 @@ export default async function ProductPage({ params }: Props) {
         <SectionCTA content={sections.cta || {}} />
 
         {/* Back */}
-        <section className="py-12 px-4 text-center bg-white">
+        <section className="py-12 px-4 text-center bg-white dark:bg-gray-950">
           <Link
             href="/"
-            className="text-indigo-600 hover:text-indigo-700 font-medium"
+            className="text-indigo-600 dark:text-indigo-400 hover:text-indigo-700 dark:hover:text-indigo-300 font-medium"
           >
             ← Все продукты Ezze
           </Link>

@@ -1,6 +1,6 @@
 "use client";
 import Link from "next/link";
-import { Zap, Check } from "lucide-react";
+import { Zap, Check, Smartphone, Gift } from "lucide-react";
 import { Suspense } from "react";
 import { useSearchParams } from "next/navigation";
 import { PRODUCTS, STATS } from "../lib/defaults";
@@ -146,6 +146,37 @@ function HomeContentInner({ sections }: Props) {
         {sections.pricing && (
           <SectionPricing content={sections.pricing} />
         )}
+
+        {/* About */}
+        <section id="about" className="py-20 px-4 bg-gray-50 dark:bg-gray-900">
+          <div className="max-w-4xl mx-auto text-center">
+            <h2 className="text-3xl md:text-4xl font-bold text-gray-900 dark:text-white mb-4">{t.about_title}</h2>
+            <p className="text-lg text-gray-600 dark:text-gray-400 mb-12 max-w-2xl mx-auto">{t.about_subtitle}</p>
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-6 text-left">
+              <div className="bg-white dark:bg-gray-800 rounded-2xl p-6 border border-gray-100 dark:border-gray-700">
+                <div className="w-10 h-10 bg-indigo-100 dark:bg-indigo-900/40 rounded-xl flex items-center justify-center mb-4">
+                  <Zap size={20} className="text-indigo-600 dark:text-indigo-400" />
+                </div>
+                <h3 className="font-bold text-gray-900 dark:text-white mb-2">{t.about_f1_title}</h3>
+                <p className="text-sm text-gray-600 dark:text-gray-400">{t.about_f1_text}</p>
+              </div>
+              <div className="bg-white dark:bg-gray-800 rounded-2xl p-6 border border-gray-100 dark:border-gray-700">
+                <div className="w-10 h-10 bg-indigo-100 dark:bg-indigo-900/40 rounded-xl flex items-center justify-center mb-4">
+                  <Smartphone size={20} className="text-indigo-600 dark:text-indigo-400" />
+                </div>
+                <h3 className="font-bold text-gray-900 dark:text-white mb-2">{t.about_f2_title}</h3>
+                <p className="text-sm text-gray-600 dark:text-gray-400">{t.about_f2_text}</p>
+              </div>
+              <div className="bg-white dark:bg-gray-800 rounded-2xl p-6 border border-gray-100 dark:border-gray-700">
+                <div className="w-10 h-10 bg-indigo-100 dark:bg-indigo-900/40 rounded-xl flex items-center justify-center mb-4">
+                  <Gift size={20} className="text-indigo-600 dark:text-indigo-400" />
+                </div>
+                <h3 className="font-bold text-gray-900 dark:text-white mb-2">{t.about_f3_title}</h3>
+                <p className="text-sm text-gray-600 dark:text-gray-400">{t.about_f3_text}</p>
+              </div>
+            </div>
+          </div>
+        </section>
 
         <SectionCTA
           content={sections.cta || {}}
