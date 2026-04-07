@@ -1,5 +1,6 @@
 import Link from "next/link";
 import { Check, Zap } from "lucide-react";
+import { type Lang, tr } from "../../lib/i18n";
 
 interface Plan {
   name: string;
@@ -21,11 +22,13 @@ interface PricingContent {
 
 interface Props {
   content: Record<string, unknown>;
+  lang?: Lang;
 }
 
-export function SectionPricing({ content }: Props) {
+export function SectionPricing({ content, lang = "ru" }: Props) {
   const c = content as PricingContent;
-  const title    = c.title    || "Тарифы";
+  const t = tr[lang];
+  const title    = c.title    || t.pricing_title;
   const subtitle = c.subtitle || "";
   const plans    = c.plans;
 
@@ -60,7 +63,7 @@ export function SectionPricing({ content }: Props) {
                 <div className={`text-xs font-semibold uppercase tracking-wide mb-3 ${
                   plan.highlighted ? "text-indigo-200" : "text-indigo-500 dark:text-indigo-400"
                 }`}>
-                  {plan.badge || "Популярный"}
+                  {plan.badge || t.pricing_popular}
                 </div>
               )}
 
@@ -104,7 +107,7 @@ export function SectionPricing({ content }: Props) {
                     : "bg-indigo-600 text-white hover:bg-indigo-700 dark:bg-indigo-600 dark:hover:bg-indigo-700"
                 }`}
               >
-                {plan.cta_text || "Начать бесплатно"}
+                {plan.cta_text || t.hero_cta1}
               </Link>
             </div>
           ))}
@@ -113,7 +116,7 @@ export function SectionPricing({ content }: Props) {
         {/* Footer note */}
         <p className="text-center text-sm text-gray-400 dark:text-gray-500 mt-8 flex items-center justify-center gap-1.5">
           <Zap size={13} className="text-indigo-400" />
-          Бесплатный тариф доступен без кредитной карты
+          {t.pricing_free_note}
         </p>
       </div>
     </section>

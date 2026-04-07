@@ -42,8 +42,8 @@ function HomeContentInner({ sections }: Props) {
   const statsContent = (sections.stats || {}) as MainStats;
 
   const heroBadge = t.hero_badge;
-  const ctaPrimary = hero.cta_primary || t.hero_cta1;
-  const ctaSecondary = hero.cta_secondary || t.hero_cta2;
+  const ctaPrimary = t.hero_cta1;
+  const ctaSecondary = t.hero_cta2;
 
   const stats =
     statsContent.items && statsContent.items.length > 0
@@ -138,7 +138,7 @@ function HomeContentInner({ sections }: Props) {
 
         {/* Pricing */}
         {sections.pricing && (
-          <SectionPricing content={sections.pricing} />
+          <SectionPricing content={sections.pricing} lang={lang} />
         )}
 
         {/* About */}
