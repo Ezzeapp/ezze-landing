@@ -1,7 +1,7 @@
 "use client";
 import Link from "next/link";
 import { Zap, Check, Smartphone, Gift } from "lucide-react";
-import { Suspense } from "react";
+import { Suspense, useState, useEffect } from "react";
 import { useSearchParams } from "next/navigation";
 import { PRODUCTS, STATS } from "../lib/defaults";
 import { SectionCTA } from "./sections/SectionCTA";
@@ -32,8 +32,23 @@ interface Props {
 
 function HomeContentInner({ sections }: Props) {
   const searchParams = useSearchParams();
-  const langParam = searchParams.get("lang");
-  const lang = (LANGS.includes(langParam as Lang) ? langParam : "ru") as Lang;
+  const [lang, setLang] = useState<Lang>("ru");
+
+  useEffect(() => {
+    const sp = searchParams.get("lang") as Lang | null;
+    const saved = localStorage.getItem("ezze_lang") as Lang | null;
+    setLang((LANGS.includes(sp as Lang) ? sp : LANGS.includes(saved as Lang) ? saved : "ru") as Lang);
+  }, [searchParams]);
+
+  useEffect(() => {
+    const handler = (e: Event) => {
+      const l = (e as CustomEvent<{ lang: Lang }>).detail?.lang;
+      if (l && LANGS.includes(l)) setLang(l);
+    };
+    window.addEventListener("ezze_lang_change", handler);
+    return () => window.removeEventListener("ezze_lang_change", handler);
+  }, []);
+
   const t = tr[lang];
 
   // Hero title/subtitle/badge always from i18n (fully translated for all 9 languages).

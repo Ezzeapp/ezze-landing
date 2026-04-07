@@ -34,6 +34,7 @@ function HeaderInner() {
     setLang(l);
     setLangOpen(false);
     localStorage.setItem("ezze_lang", l);
+    window.dispatchEvent(new CustomEvent("ezze_lang_change", { detail: { lang: l } }));
     const p = new URLSearchParams(searchParams.toString());
     p.set("lang", l);
     router.push(`${pathname}?${p.toString()}`);
