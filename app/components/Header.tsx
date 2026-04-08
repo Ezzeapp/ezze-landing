@@ -42,6 +42,15 @@ function HeaderInner() {
 
   const t = tr[lang];
 
+  function handleAnchor(e: React.MouseEvent<HTMLAnchorElement>, anchor: string) {
+    if (pathname === "/") {
+      e.preventDefault();
+      document.getElementById(anchor)?.scrollIntoView({ behavior: "smooth" });
+    }
+    // На других страницах — обычный переход на /?lang=...#anchor,
+    // HomeContent сам докрутит после mount
+  }
+
   return (
     <header className="sticky top-0 z-50 bg-white/90 dark:bg-gray-950/90 backdrop-blur border-b border-gray-100 dark:border-gray-800">
       <div className="max-w-6xl mx-auto px-4 h-16 flex items-center justify-between">
@@ -51,9 +60,9 @@ function HeaderInner() {
         </Link>
 
         <nav className="hidden md:flex items-center gap-6 text-sm text-gray-600 dark:text-gray-400">
-          <Link href={`/?lang=${lang}#products`} className="hover:text-indigo-600 dark:hover:text-indigo-400 transition-colors">{t.nav_products}</Link>
-          <Link href={`/?lang=${lang}#pricing`} className="hover:text-indigo-600 dark:hover:text-indigo-400 transition-colors">{t.nav_pricing}</Link>
-          <Link href={`/?lang=${lang}#about`} className="hover:text-indigo-600 dark:hover:text-indigo-400 transition-colors">{t.nav_about}</Link>
+          <Link href={`/?lang=${lang}#products`} onClick={(e) => handleAnchor(e, "products")} className="hover:text-indigo-600 dark:hover:text-indigo-400 transition-colors">{t.nav_products}</Link>
+          <Link href={`/?lang=${lang}#pricing`}  onClick={(e) => handleAnchor(e, "pricing")}  className="hover:text-indigo-600 dark:hover:text-indigo-400 transition-colors">{t.nav_pricing}</Link>
+          <Link href={`/?lang=${lang}#about`}    onClick={(e) => handleAnchor(e, "about")}    className="hover:text-indigo-600 dark:hover:text-indigo-400 transition-colors">{t.nav_about}</Link>
         </nav>
 
         <div className="flex items-center gap-2">

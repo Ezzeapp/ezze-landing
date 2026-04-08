@@ -23,9 +23,19 @@ interface PricingContent {
 interface Props {
   content: Record<string, unknown>;
   lang?: Lang;
+  /** Цены из app_settings.plan_prices { free, pro, enterprise } — перетирают plan.price */
+  planPrices?: Record<string, number>;
 }
 
-export function SectionPricing({ content, lang = "ru" }: Props) {
+// plan_prices ключи по порядку планов (free=0, pro=1, enterprise=2)
+const PRICE_KEYS = ["free", "pro", "enterprise"];
+
+function formatPrice(n: number): string {
+  if (n === 0) return "0";
+  return n.toLocaleString("ru-RU") + " сум";
+}
+
+export function SectionPricing({ content, lang = "ru", planPrices }: Props) {
   const c = content as PricingContent;
   const t = tr[lang];
   const title    = c.title    || t.pricing_title;
@@ -49,7 +59,15 @@ export function SectionPricing({ content, lang = "ru" }: Props) {
         </div>
 
         <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-          {plans.map((plan, i) => (
+          {plans.map((plan, i) => {
+            // Если переданы planPrices — берём цену оттуда, иначе из контента
+            const priceKey = PRICE_KEYS[i];
+            const overridePrice =
+              planPrices && priceKey && planPrices[priceKey] !== undefined
+                ? formatPrice(planPrices[priceKey])
+                : null;
+            const displayPrice = overridePrice ?? plan.price;
+            return (
             <div
               key={i}
               className={`relative rounded-2xl p-8 flex flex-col border-2 transition-shadow ${
@@ -77,7 +95,7 @@ export function SectionPricing({ content, lang = "ru" }: Props) {
 
               {/* Price */}
               <div className="flex items-baseline gap-1 mb-6">
-                <span className="text-3xl font-bold">{plan.price}</span>
+                <span className="text-3xl font-bold">{displayPrice}</span>
                 {plan.period && (
                   <span className={`text-sm ${plan.highlighted ? "text-indigo-200" : "text-gray-500 dark:text-gray-400"}`}>
                     / {plan.period}
@@ -110,7 +128,8 @@ export function SectionPricing({ content, lang = "ru" }: Props) {
                 {plan.cta_text || t.hero_cta1}
               </Link>
             </div>
-          ))}
+            );
+          })}
         </div>
 
         {/* Footer note */}

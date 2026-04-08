@@ -94,9 +94,21 @@ function HomeContentInner({ sections, settings: initialSettings }: Props) {
 
   // Fetch fresh settings from Supabase at runtime (so changes from superadmin apply without rebuild)
   useEffect(() => {
-    getAppSettings(["products_config", "about_config", "contacts_config"])
+    getAppSettings(["products_config", "about_config", "contacts_config", "plan_prices"])
       .then((data) => { if (Object.keys(data).length > 0) setSettings(data); })
       .catch(() => {});
+  }, []);
+
+  // Скролл к якорю после перехода с другой страницы (например /beauty → /#products)
+  useEffect(() => {
+    const hash = window.location.hash.slice(1);
+    if (hash) {
+      // Небольшая задержка чтобы DOM успел отрендериться
+      const t = setTimeout(() => {
+        document.getElementById(hash)?.scrollIntoView({ behavior: "smooth" });
+      }, 150);
+      return () => clearTimeout(t);
+    }
   }, []);
 
   const t = tr[lang];
@@ -225,7 +237,11 @@ function HomeContentInner({ sections, settings: initialSettings }: Props) {
 
         {/* Pricing */}
         {sections.pricing && (
-          <SectionPricing content={sections.pricing} lang={lang} />
+          <SectionPricing
+            content={sections.pricing}
+            lang={lang}
+            planPrices={settings?.plan_prices as Record<string, number> | undefined}
+          />
         )}
 
         {/* About */}
