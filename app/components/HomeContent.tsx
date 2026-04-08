@@ -44,7 +44,7 @@ interface AboutConfig {
   tagline?: string;
   description?: string;
   founded_year?: string;
-  history?: string;
+  story?: string;
 }
 
 interface ContactsConfig {
@@ -299,7 +299,7 @@ function HomeContentInner({ sections, settings: initialSettings }: Props) {
                 {aboutConfig.company_name || "Ezze"} — {t.about_since || "с"} {aboutConfig.founded_year}
               </p>
             )}
-            {aboutConfig?.history && <HistoryBlock history={aboutConfig.history} />}
+            {aboutConfig?.story && <HistoryBlock history={aboutConfig.story} />}
           </div>
         </section>
 
