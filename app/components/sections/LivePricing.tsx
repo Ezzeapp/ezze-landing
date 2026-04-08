@@ -21,16 +21,20 @@ interface Props {
 
 export function LivePricing({ content, lang = "ru" }: Props) {
   const [planPrices, setPlanPrices] = useState<Record<string, number> | undefined>(undefined);
+  const [planNames, setPlanNames] = useState<Record<string, string> | undefined>(undefined);
 
   useEffect(() => {
-    getAppSettings(["plan_prices"])
+    getAppSettings(["plan_prices", "plan_names"])
       .then((data) => {
         if (data.plan_prices && typeof data.plan_prices === "object") {
           setPlanPrices(data.plan_prices as Record<string, number>);
+        }
+        if (data.plan_names && typeof data.plan_names === "object") {
+          setPlanNames(data.plan_names as Record<string, string>);
         }
       })
       .catch(() => {});
   }, []);
 
-  return <SectionPricing content={content} lang={lang} planPrices={planPrices} />;
+  return <SectionPricing content={content} lang={lang} planPrices={planPrices} planNames={planNames} />;
 }

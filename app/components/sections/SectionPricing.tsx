@@ -25,6 +25,8 @@ interface Props {
   lang?: Lang;
   /** Цены из app_settings.plan_prices { free, pro, enterprise } — перетирают plan.price */
   planPrices?: Record<string, number>;
+  /** Названия из app_settings.plan_names { free, pro, enterprise } — перетирают plan.name */
+  planNames?: Record<string, string>;
 }
 
 // plan_prices ключи по порядку планов (free=0, pro=1, enterprise=2)
@@ -35,7 +37,7 @@ function formatPrice(n: number): string {
   return n.toLocaleString("ru-RU") + " сум";
 }
 
-export function SectionPricing({ content, lang = "ru", planPrices }: Props) {
+export function SectionPricing({ content, lang = "ru", planPrices, planNames }: Props) {
   const c = content as PricingContent;
   const t = tr[lang];
   const title    = c.title    || t.pricing_title;
@@ -67,6 +69,7 @@ export function SectionPricing({ content, lang = "ru", planPrices }: Props) {
                 ? formatPrice(planPrices[priceKey])
                 : null;
             const displayPrice = overridePrice ?? plan.price;
+            const displayName = (planNames && priceKey && planNames[priceKey]) ? planNames[priceKey] : plan.name;
             return (
             <div
               key={i}
@@ -86,7 +89,7 @@ export function SectionPricing({ content, lang = "ru", planPrices }: Props) {
               )}
 
               {/* Name */}
-              <h3 className="text-xl font-bold mb-1">{plan.name}</h3>
+              <h3 className="text-xl font-bold mb-1">{displayName}</h3>
               {plan.subtitle && (
                 <p className={`text-sm mb-4 ${plan.highlighted ? "text-indigo-200" : "text-gray-500 dark:text-gray-400"}`}>
                   {plan.subtitle}
