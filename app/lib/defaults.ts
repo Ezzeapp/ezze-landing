@@ -1,6 +1,6 @@
 import {
   Scissors, Shirt, Stethoscope, Leaf, GraduationCap,
-  UtensilsCrossed, CalendarDays, Building2, Car, Hammer,
+  UtensilsCrossed, CalendarDays, Building2, Car, Hammer, ShoppingBag,
 } from "lucide-react";
 import type { LucideIcon } from "lucide-react";
 
@@ -116,11 +116,21 @@ export const PRODUCTS: Product[] = [
     features: ["Проекты", "Сметы", "Материалы", "Команда"],
     comingSoon: true,
   },
+  {
+    slug: "trade",
+    name: "Ezze Trade",
+    description: "Розничная и оптовая торговля, магазины и склады",
+    icon: ShoppingBag, iconName: "ShoppingBag",
+    color: "from-emerald-500 to-green-600",
+    url: "https://trade.ezze.site",
+    features: ["Товары", "Продажи", "Склад", "Аналитика"],
+    comingSoon: true,
+  },
 ];
 
 export const STATS = [
   { value: "5 000+", label: "Мастеров и специалистов" },
   { value: "50 000+", label: "Записей в месяц" },
   { value: "9", label: "Языков интерфейса" },
-  { value: "10", label: "Продуктов в экосистеме" },
+  { value: "11", label: "Продуктов в экосистеме" },
 ];
