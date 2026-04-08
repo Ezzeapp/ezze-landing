@@ -1,7 +1,7 @@
 "use client";
 import Link from "next/link";
 import {
-  Zap, Check, Smartphone, Gift,
+  Zap, Check, Smartphone, Gift, ChevronDown,
   Globe, Scissors, Shirt, Stethoscope, Leaf, GraduationCap,
   CalendarDays, UtensilsCrossed, Building2, Car, Hammer,
   ShoppingBag, Heart, Dumbbell, Package, Truck, Camera,
@@ -44,6 +44,7 @@ interface AboutConfig {
   tagline?: string;
   description?: string;
   founded_year?: string;
+  history?: string;
 }
 
 interface ContactsConfig {
@@ -70,6 +71,29 @@ interface Props {
     cta?: Record<string, unknown>;
   };
   settings?: Record<string, unknown>;
+}
+
+function HistoryBlock({ history }: { history: string }) {
+  const [open, setOpen] = useState(false);
+  return (
+    <div className="mt-8 text-left max-w-2xl mx-auto">
+      <button
+        onClick={() => setOpen(v => !v)}
+        className="flex items-center gap-2 text-sm font-medium text-indigo-600 dark:text-indigo-400 hover:text-indigo-700 dark:hover:text-indigo-300 transition-colors mx-auto"
+      >
+        {open ? "Скрыть историю компании" : "Читать историю компании"}
+        <ChevronDown
+          size={16}
+          className={`transition-transform duration-200 ${open ? "rotate-180" : ""}`}
+        />
+      </button>
+      {open && (
+        <div className="mt-4 text-sm text-gray-600 dark:text-gray-400 leading-relaxed whitespace-pre-line rounded-2xl bg-white dark:bg-gray-800 border border-gray-100 dark:border-gray-700 p-6 text-left">
+          {history}
+        </div>
+      )}
+    </div>
+  );
 }
 
 function HomeContentInner({ sections, settings: initialSettings }: Props) {
@@ -275,6 +299,7 @@ function HomeContentInner({ sections, settings: initialSettings }: Props) {
                 {aboutConfig.company_name || "Ezze"} — {t.about_since || "с"} {aboutConfig.founded_year}
               </p>
             )}
+            {aboutConfig?.history && <HistoryBlock history={aboutConfig.history} />}
           </div>
         </section>
 
