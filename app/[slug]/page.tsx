@@ -8,7 +8,7 @@ import { getSections } from "../lib/supabase";
 import { tr } from "../lib/i18n";
 import { SectionHero } from "../components/sections/SectionHero";
 import { SectionFeatures } from "../components/sections/SectionFeatures";
-import { SectionPricing } from "../components/sections/SectionPricing";
+import { LivePricing } from "../components/sections/LivePricing";
 import { SectionReviews } from "../components/sections/SectionReviews";
 import { SectionFAQ } from "../components/sections/SectionFAQ";
 import { SectionCTA } from "../components/sections/SectionCTA";
@@ -65,7 +65,7 @@ export default async function ProductPage({ params }: Props) {
           fallbackItems={product.features}
         />
 
-        <SectionPricing content={sections.pricing || {}} />
+        <LivePricing content={sections.pricing || {}} />
 
         <SectionReviews content={sections.reviews || {}} />
 

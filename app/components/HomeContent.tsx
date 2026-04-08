@@ -14,7 +14,7 @@ import { useSearchParams } from "next/navigation";
 import { PRODUCTS, STATS } from "../lib/defaults";
 import { getAppSettings } from "../lib/supabase";
 import { SectionCTA } from "./sections/SectionCTA";
-import { SectionPricing } from "./sections/SectionPricing";
+import { LivePricing } from "./sections/LivePricing";
 import Footer from "./Footer";
 import { type Lang, LANGS, tr } from "../lib/i18n";
 
@@ -94,7 +94,7 @@ function HomeContentInner({ sections, settings: initialSettings }: Props) {
 
   // Fetch fresh settings from Supabase at runtime (so changes from superadmin apply without rebuild)
   useEffect(() => {
-    getAppSettings(["products_config", "about_config", "contacts_config", "plan_prices"])
+    getAppSettings(["products_config", "about_config", "contacts_config"])
       .then((data) => { if (Object.keys(data).length > 0) setSettings(data); })
       .catch(() => {});
   }, []);
@@ -235,13 +235,9 @@ function HomeContentInner({ sections, settings: initialSettings }: Props) {
           </div>
         </section>
 
-        {/* Pricing */}
+        {/* Pricing — LivePricing сам фетчит plan_prices из app_settings */}
         {sections.pricing && (
-          <SectionPricing
-            content={sections.pricing}
-            lang={lang}
-            planPrices={settings?.plan_prices as Record<string, number> | undefined}
-          />
+          <LivePricing content={sections.pricing} lang={lang} />
         )}
 
         {/* About */}
