@@ -2,7 +2,7 @@
 import Link from "next/link";
 import {
   Zap, Check, Smartphone, Gift, ChevronDown,
-  Globe, Scissors, Shirt, Stethoscope, Leaf, GraduationCap,
+  Globe, Scissors, Shirt, WashingMachine, Stethoscope, Leaf, GraduationCap,
   CalendarDays, UtensilsCrossed, Building2, Car, Hammer,
   ShoppingBag, Heart, Dumbbell, Package, Truck, Camera,
   Music, Dog, Flower2, Wrench, Cpu, BookOpen, Coffee, Bike,
@@ -19,7 +19,7 @@ import Footer from "./Footer";
 import { type Lang, LANGS, tr } from "../lib/i18n";
 
 const ICON_MAP: Record<string, LucideIcon> = {
-  Globe, Scissors, Shirt, Stethoscope, Leaf, GraduationCap,
+  Globe, Scissors, Shirt, WashingMachine, Stethoscope, Leaf, GraduationCap,
   CalendarDays, UtensilsCrossed, Building2, Car, Hammer,
   ShoppingBag, Heart, Dumbbell, Package, Truck, Camera,
   Music, Dog, Flower2, Wrench, Cpu, BookOpen, Coffee, Bike,
@@ -37,6 +37,9 @@ interface ProductConfigItem {
   url: string;
   hidden: boolean;
   comingSoon: boolean;
+  description?: string;
+  color?: string;
+  features?: string[];
 }
 
 interface AboutConfig {
@@ -161,11 +164,11 @@ function HomeContentInner({ sections, settings: initialSettings }: Props) {
           return {
             slug: c.slug,
             name: c.label,
-            description: def?.description || "",
+            description: c.description || def?.description || "",
             icon: getIcon(c.iconName),
-            color: def?.color || "from-gray-500 to-gray-600",
+            color: c.color || def?.color || "from-gray-500 to-gray-600",
             url: c.url,
-            features: def?.features || [],
+            features: c.features?.length ? c.features : (def?.features || []),
             comingSoon: c.comingSoon,
           };
         });
