@@ -1,5 +1,5 @@
 import {
-  Scissors, Shirt, Stethoscope, Leaf, GraduationCap,
+  Scissors, Wrench, WashingMachine, Stethoscope, Leaf, GraduationCap,
   UtensilsCrossed, CalendarDays, Building2, Car, Hammer, ShoppingBag,
 } from "lucide-react";
 import type { LucideIcon } from "lucide-react";
@@ -20,17 +20,17 @@ export const PRODUCTS: Product[] = [
   {
     slug: "beauty",
     name: "Ezze Beauty",
-    description: "Платформа для мастеров красоты, тренеров и самозанятых специалистов",
+    description: "Салоны красоты, парикмахеры, косметологи и мастера",
     icon: Scissors, iconName: "Scissors",
     color: "from-pink-500 to-purple-600",
-    url: "https://pro.ezze.site",
+    url: "https://beauty.ezze.site",
     features: ["Онлайн-запись", "Клиентская база", "Расписание", "Статистика"],
   },
   {
     slug: "workshop",
     name: "Ezze Workshop",
-    description: "Управление химчисткой, ателье, ремонтными мастерскими",
-    icon: Shirt, iconName: "Shirt",
+    description: "Ремонтные мастерские, сервисные центры, умельцы",
+    icon: Wrench, iconName: "Wrench",
     color: "from-blue-500 to-cyan-600",
     url: "https://workshop.ezze.site",
     features: ["Приём заказов", "Трекинг статуса", "SMS-уведомления", "Склад"],
@@ -126,11 +126,21 @@ export const PRODUCTS: Product[] = [
     features: ["Товары", "Продажи", "Склад", "Аналитика"],
     comingSoon: true,
   },
+  {
+    slug: "cleaning",
+    name: "Ezze Cleaning",
+    description: "Химчистки, прачечные, чистка ковров и одежды",
+    icon: WashingMachine, iconName: "WashingMachine",
+    color: "from-cyan-500 to-blue-600",
+    url: "https://cleaning.ezze.site",
+    features: ["Приём заказов", "Статус заказа", "Уведомления", "Склад"],
+    comingSoon: true,
+  },
 ];
 
 export const STATS = [
   { value: "5 000+", label: "Мастеров и специалистов" },
   { value: "50 000+", label: "Записей в месяц" },
   { value: "9", label: "Языков интерфейса" },
-  { value: "11", label: "Продуктов в экосистеме" },
+  { value: "12", label: "Продуктов в экосистеме" },
 ];
