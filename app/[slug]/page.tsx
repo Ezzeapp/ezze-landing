@@ -65,7 +65,7 @@ export default async function ProductPage({ params }: Props) {
           fallbackItems={product.features}
         />
 
-        <LivePricing content={sections.pricing || {}} />
+        <LivePricing content={sections.pricing || {}} product={slug} />
 
         <SectionReviews content={sections.reviews || {}} />
 

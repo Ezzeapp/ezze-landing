@@ -1,13 +1,14 @@
 "use client";
 /**
- * LivePricing — умный клиентский компонент тарифов.
+ * LivePricing — клиентский компонент тарифов.
  *
- * Архитектура цен:
- *   app_settings.plan_prices  →  единый источник цен для всей платформы
- *   landing_sections.*.pricing  →  структура блока (название, фичи, кнопки, описание)
+ * Архитектура:
+ *   app_settings (UNIQUE product,key) → plan_prices / plan_names per-product
+ *   landing_sections.{product}.pricing → структура блока (фичи, кнопки, описание)
  *
- * LivePricing фетчит plan_prices сам при монтировании и перетирает цены
- * из JSON-контента. Работает везде: главная, /beauty, /clinic, etc.
+ * При указании product: фетчит plan_prices/plan_names именно для этого продукта.
+ * Без product: тянет общие (legacy) — но на главной такой блок мы больше не рендерим,
+ * вместо него — компонент PricingOverview (карточки по продуктам).
  */
 import { useEffect, useState } from "react";
 import { SectionPricing } from "./SectionPricing";
@@ -17,14 +18,16 @@ import type { Lang } from "../../lib/i18n";
 interface Props {
   content: Record<string, unknown>;
   lang?: Lang;
+  /** slug продукта — например "beauty", "cleaning". Если не указан — фетч без фильтра. */
+  product?: string;
 }
 
-export function LivePricing({ content, lang = "ru" }: Props) {
+export function LivePricing({ content, lang = "ru", product }: Props) {
   const [planPrices, setPlanPrices] = useState<Record<string, number> | undefined>(undefined);
   const [planNames, setPlanNames] = useState<Record<string, string> | undefined>(undefined);
 
   useEffect(() => {
-    getAppSettings(["plan_prices", "plan_names"])
+    getAppSettings(["plan_prices", "plan_names"], product)
       .then((data) => {
         if (data.plan_prices && typeof data.plan_prices === "object") {
           setPlanPrices(data.plan_prices as Record<string, number>);
@@ -34,7 +37,7 @@ export function LivePricing({ content, lang = "ru" }: Props) {
         }
       })
       .catch(() => {});
-  }, []);
+  }, [product]);
 
   return <SectionPricing content={content} lang={lang} planPrices={planPrices} planNames={planNames} />;
 }

@@ -38,13 +38,23 @@ export async function getSections(
   }
 }
 
-export async function getAppSettings(keys: string[]): Promise<Record<string, unknown>> {
+/**
+ * @param keys     ключи app_settings
+ * @param product  если указан — фильтр по product (для per-product настроек: plan_prices, plan_names и т.д.)
+ *                 Без product вернутся все строки с этими ключами (legacy / "main" / неоднозначно).
+ */
+export async function getAppSettings(
+  keys: string[],
+  product?: string
+): Promise<Record<string, unknown>> {
   try {
     if (!supabase) return {};
-    const { data } = await supabase
+    let query = supabase
       .from("app_settings")
       .select("key, value")
       .in("key", keys);
+    if (product) query = query.eq("product", product);
+    const { data } = await query;
     if (!data) return {};
     const result: Record<string, unknown> = {};
     for (const row of data) {
@@ -52,6 +62,38 @@ export async function getAppSettings(keys: string[]): Promise<Record<string, unk
         result[row.key] = typeof row.value === "string" ? JSON.parse(row.value) : row.value;
       } catch {
         result[row.key] = row.value;
+      }
+    }
+    return result;
+  } catch {
+    return {};
+  }
+}
+
+/**
+ * Достаёт plan_prices сразу для нескольких продуктов одним запросом.
+ * Возвращает map: slug → { free?, pro?, enterprise? }
+ */
+export async function getPlanPricesForProducts(
+  slugs: string[]
+): Promise<Record<string, Record<string, number>>> {
+  try {
+    if (!supabase || slugs.length === 0) return {};
+    const { data } = await supabase
+      .from("app_settings")
+      .select("product, key, value")
+      .eq("key", "plan_prices")
+      .in("product", slugs);
+    if (!data) return {};
+    const result: Record<string, Record<string, number>> = {};
+    for (const row of data as { product: string; key: string; value: unknown }[]) {
+      try {
+        const parsed = typeof row.value === "string" ? JSON.parse(row.value) : row.value;
+        if (parsed && typeof parsed === "object") {
+          result[row.product] = parsed as Record<string, number>;
+        }
+      } catch {
+        /* ignore */
       }
     }
     return result;

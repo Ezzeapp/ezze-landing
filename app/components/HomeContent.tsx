@@ -14,7 +14,7 @@ import { useSearchParams } from "next/navigation";
 import { PRODUCTS, STATS } from "../lib/defaults";
 import { getAppSettings } from "../lib/supabase";
 import { SectionCTA } from "./sections/SectionCTA";
-import { LivePricing } from "./sections/LivePricing";
+import { PricingOverview } from "./sections/PricingOverview";
 import Footer from "./Footer";
 import { type Lang, LANGS, tr } from "../lib/i18n";
 
@@ -262,10 +262,9 @@ function HomeContentInner({ sections, settings: initialSettings }: Props) {
           </div>
         </section>
 
-        {/* Pricing — LivePricing сам фетчит plan_prices из app_settings */}
-        {sections.pricing && (
-          <LivePricing content={sections.pricing} lang={lang} />
-        )}
+        {/* Pricing overview — у каждого продукта свои тарифы, на главной показываем сводку.
+            Полные таблицы цен — на /[slug]#pricing. */}
+        <PricingOverview productList={productList} lang={lang} />
 
         {/* About */}
         <section id="about" className="py-20 px-4 bg-gray-50 dark:bg-gray-900">
