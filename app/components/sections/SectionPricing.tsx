@@ -121,7 +121,7 @@ export function SectionPricing({ content, lang = "ru", planPrices, planNames }: 
 
               {/* CTA */}
               <Link
-                href={plan.cta_url || "https://pro.ezze.site/register"}
+                href={plan.cta_url || "https://app.ezze.site/register"}
                 className={`w-full text-center py-3 px-6 rounded-xl font-medium text-sm transition-colors ${
                   plan.highlighted
                     ? "bg-white text-indigo-600 hover:bg-indigo-50"

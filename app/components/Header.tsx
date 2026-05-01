@@ -4,8 +4,14 @@ import { Zap, Sun, Moon, ChevronDown } from "lucide-react";
 import { useState, useEffect, Suspense } from "react";
 import { useRouter, useSearchParams, usePathname } from "next/navigation";
 import { type Lang, LANGS, LANG_LABELS, LANG_NAMES, tr } from "../lib/i18n";
+import { PRODUCTS } from "../lib/defaults";
 
-function HeaderInner() {
+interface HeaderProps {
+  /** slug продукта на /[slug] странице — определяет URL кнопок «Войти» / «Начать» */
+  product?: string;
+}
+
+function HeaderInner({ product }: HeaderProps) {
   const [isDark, setIsDark] = useState(false);
   const [lang, setLang] = useState<Lang>("ru");
   const [langOpen, setLangOpen] = useState(false);
@@ -41,6 +47,15 @@ function HeaderInner() {
   }
 
   const t = tr[lang];
+
+  // Определяем URL кнопок:
+  // - на /[slug] — Войти ведёт на сайт продукта, Начать → app.ezze.site/register?product=<slug>
+  // - на главной — Войти/Начать → app.ezze.site (нейтральный домен регистрации)
+  const productInfo = product ? PRODUCTS.find((p) => p.slug === product) : null;
+  const loginUrl = productInfo?.url || "https://app.ezze.site";
+  const registerUrl = product
+    ? `https://app.ezze.site/register?product=${product}`
+    : "https://app.ezze.site/register";
 
   function handleAnchor(e: React.MouseEvent<HTMLAnchorElement>, anchor: string) {
     if (pathname === "/") {
@@ -107,11 +122,11 @@ function HeaderInner() {
             {isDark ? <Sun size={16} /> : <Moon size={16} />}
           </button>
 
-          <Link href="https://pro.ezze.site"
+          <Link href={loginUrl}
             className="text-sm text-gray-600 dark:text-gray-400 hover:text-indigo-600 dark:hover:text-indigo-400 transition-colors ml-1">
             {t.login}
           </Link>
-          <Link href="https://pro.ezze.site/register"
+          <Link href={registerUrl}
             className="text-sm bg-indigo-600 text-white px-4 py-2 rounded-lg hover:bg-indigo-700 transition-colors">
             {t.start_free}
           </Link>
@@ -121,12 +136,12 @@ function HeaderInner() {
   );
 }
 
-export default function Header() {
+export default function Header({ product }: HeaderProps = {}) {
   return (
     <Suspense fallback={
       <header className="sticky top-0 z-50 bg-white/90 dark:bg-gray-950/90 backdrop-blur border-b border-gray-100 dark:border-gray-800 h-16" />
     }>
-      <HeaderInner />
+      <HeaderInner product={product} />
     </Suspense>
   );
 }

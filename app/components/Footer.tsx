@@ -10,7 +10,20 @@ interface ContactsConfig {
   phone?: string;
 }
 
-export default function Footer({ lang = "ru", contacts }: { lang?: Lang; contacts?: ContactsConfig }) {
+interface FooterProduct {
+  slug: string;
+  name: string;
+}
+
+export default function Footer({
+  lang = "ru",
+  contacts,
+  products,
+}: {
+  lang?: Lang;
+  contacts?: ContactsConfig;
+  products?: FooterProduct[];
+}) {
   const t = tr[lang];
   const telegram = contacts?.telegram || "https://t.me/ezzeapp";
   const email = contacts?.email;
@@ -18,24 +31,37 @@ export default function Footer({ lang = "ru", contacts }: { lang?: Lang; contact
   const youtube = contacts?.youtube;
   const phone = contacts?.phone;
 
+  // Default product list если не передан (fallback)
+  const productLinks: FooterProduct[] = products && products.length > 0
+    ? products.slice(0, 6)
+    : [
+        { slug: "beauty",   name: "Ezze Beauty" },
+        { slug: "workshop", name: "Ezze Workshop" },
+        { slug: "clinic",   name: "Ezze Clinic" },
+        { slug: "cleaning", name: "Ezze Cleaning" },
+      ];
+
   return (
     <footer className="bg-gray-900 dark:bg-black text-gray-400 mt-auto">
       <div className="max-w-6xl mx-auto px-4 py-12">
         <div className="grid grid-cols-2 md:grid-cols-4 gap-8 mb-8">
           <div className="col-span-2 md:col-span-1">
-            <div className="flex items-center gap-2 font-bold text-xl text-white mb-3">
+            <Link href={`/?lang=${lang}`} className="inline-flex items-center gap-2 font-bold text-xl text-white mb-3 hover:text-indigo-400 transition-colors">
               <Zap size={20} />
               <span>Ezze</span>
-            </div>
+            </Link>
             <p className="text-sm">{t.footer_tagline}</p>
           </div>
           <div>
             <h4 className="text-white font-medium mb-3 text-sm">{t.footer_products}</h4>
             <ul className="space-y-2 text-sm">
-              <li><Link href={`/beauty?lang=${lang}`} className="hover:text-white transition-colors">Ezze Beauty</Link></li>
-              <li><Link href={`/workshop?lang=${lang}`} className="hover:text-white transition-colors">Ezze Workshop</Link></li>
-              <li><Link href={`/clinic?lang=${lang}`} className="hover:text-white transition-colors">Ezze Clinic</Link></li>
-              <li><Link href={`/farm?lang=${lang}`} className="hover:text-white transition-colors">Ezze Farm</Link></li>
+              {productLinks.map((p) => (
+                <li key={p.slug}>
+                  <Link href={`/${p.slug}?lang=${lang}`} className="hover:text-white transition-colors">
+                    {p.name}
+                  </Link>
+                </li>
+              ))}
             </ul>
           </div>
           <div>

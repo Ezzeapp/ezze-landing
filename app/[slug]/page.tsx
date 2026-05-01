@@ -1,11 +1,9 @@
-import Link from "next/link";
 import { notFound } from "next/navigation";
 import type { Metadata } from "next";
 import Header from "../components/Header";
 import Footer from "../components/Footer";
 import { PRODUCTS } from "../lib/defaults";
-import { getSections } from "../lib/supabase";
-import { tr } from "../lib/i18n";
+import { getSections, getAppSettings } from "../lib/supabase";
 import { SectionHero } from "../components/sections/SectionHero";
 import { SectionFeatures } from "../components/sections/SectionFeatures";
 import { LivePricing } from "../components/sections/LivePricing";
@@ -37,20 +35,36 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
   };
 }
 
+interface ProductConfigItem {
+  slug: string;
+  label: string;
+  hidden?: boolean;
+}
+
 export default async function ProductPage({ params }: Props) {
   const { slug } = await params;
   const product = PRODUCTS.find((p) => p.slug === slug);
   if (!product) notFound();
 
-  const sections = await getSections(slug, "ru");
+  const [sections, settings] = await Promise.all([
+    getSections(slug, "ru"),
+    getAppSettings(["products_config", "contacts_config"]),
+  ]);
+
+  const contactsConfig = settings?.contacts_config as { telegram?: string; email?: string; phone?: string; instagram?: string; youtube?: string } | undefined;
+  const productsConfig = settings?.products_config as ProductConfigItem[] | undefined;
+  const footerProducts = (productsConfig || [])
+    .filter((p) => !p.hidden && p.slug !== "main")
+    .map((p) => ({ slug: p.slug, name: p.label }));
 
   return (
     <>
-      <Header />
+      <Header product={slug} />
       <main className="flex-1">
         <SectionHero
           content={sections.hero || {}}
           fallback={{
+            slug: product.slug,
             title: product.name,
             subtitle: product.description,
             color: product.color,
@@ -78,7 +92,7 @@ export default async function ProductPage({ params }: Props) {
           <BackLink />
         </section>
       </main>
-      <Footer />
+      <Footer contacts={contactsConfig} products={footerProducts} />
     </>
   );
 }

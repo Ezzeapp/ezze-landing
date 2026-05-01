@@ -8,12 +8,15 @@ interface HeroContent {
   badge?: string;
   cta_text?: string;
   cta_url?: string;
+  cta_secondary_text?: string;
+  cta_secondary_url?: string;
 }
 
 interface Props {
   content: Record<string, unknown>;
   lang?: Lang;
   fallback: {
+    slug: string;
     title: string;
     subtitle: string;
     color: string;
@@ -28,10 +31,16 @@ export function SectionHero({ content, lang = "ru", fallback }: Props) {
   const t = tr[lang];
   const title = c.title || fallback.title;
   const subtitle = c.subtitle || fallback.subtitle;
-  const ctaText = c.cta_text || t.open_app;
-  const ctaUrl = c.cta_url || fallback.url;
   const badge = c.badge;
   const Icon = fallback.icon;
+
+  // Основная кнопка — регистрация (универсальный домен app.ezze.site)
+  const primaryUrl = c.cta_url || `https://app.ezze.site/register?product=${fallback.slug}`;
+  const primaryText = c.cta_text || t.start_free;
+
+  // Вторичная кнопка — открыть приложение (если не coming-soon)
+  const secondaryUrl = c.cta_secondary_url || fallback.url;
+  const secondaryText = c.cta_secondary_text || t.open_app;
 
   return (
     <section className={`bg-gradient-to-br ${fallback.color} py-24 px-4 text-white`}>
@@ -55,18 +64,22 @@ export function SectionHero({ content, lang = "ru", fallback }: Props) {
           )}
         </div>
         <p className="text-xl text-white/80 mb-10 max-w-2xl mx-auto">{subtitle}</p>
-        {!fallback.comingSoon ? (
+        <div className="flex flex-col sm:flex-row gap-3 justify-center">
           <Link
-            href={ctaUrl}
+            href={primaryUrl}
             className="bg-white text-gray-900 px-8 py-4 rounded-xl text-lg font-bold hover:bg-gray-50 transition-colors inline-block"
           >
-            {ctaText}
+            {primaryText}
           </Link>
-        ) : (
-          <div className="bg-white/20 text-white px-8 py-4 rounded-xl text-lg font-medium inline-block">
-            {t.awaiting_launch}
-          </div>
-        )}
+          {!fallback.comingSoon && (
+            <Link
+              href={secondaryUrl}
+              className="bg-white/15 backdrop-blur text-white border border-white/30 px-8 py-4 rounded-xl text-lg font-medium hover:bg-white/25 transition-colors inline-block"
+            >
+              {secondaryText}
+            </Link>
+          )}
+        </div>
       </div>
     </section>
   );

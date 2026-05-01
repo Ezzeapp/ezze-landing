@@ -25,7 +25,7 @@ export function SectionCTA({ content, lang = "ru", fallback }: Props) {
   const title = c.title || fallback?.title || t.cta_title;
   const subtitle = c.subtitle || fallback?.subtitle || t.cta_subtitle;
   const buttonText = c.button_text || fallback?.button_text || t.cta_button;
-  const buttonUrl = c.button_url || fallback?.button_url || "https://pro.ezze.site/register";
+  const buttonUrl = c.button_url || fallback?.button_url || "https://app.ezze.site/register";
 
   return (
     <section className="bg-indigo-600 py-20 px-4 text-center text-white">

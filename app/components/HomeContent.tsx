@@ -193,7 +193,7 @@ function HomeContentInner({ sections, settings: initialSettings }: Props) {
             <p className="text-xl text-gray-600 dark:text-gray-400 mb-10 max-w-2xl mx-auto">{t.hero_subtitle}</p>
             <div className="flex flex-col sm:flex-row gap-4 justify-center">
               <Link
-                href="https://pro.ezze.site/register"
+                href="https://app.ezze.site/register"
                 className="bg-indigo-600 text-white px-8 py-4 rounded-xl text-lg font-medium hover:bg-indigo-700 transition-colors"
               >
                 {ctaPrimary}
@@ -312,11 +312,15 @@ function HomeContentInner({ sections, settings: initialSettings }: Props) {
             title: t.cta_title,
             subtitle: t.cta_subtitle,
             button_text: t.cta_button,
-            button_url: "https://pro.ezze.site/register",
+            button_url: "https://app.ezze.site/register",
           }}
         />
       </main>
-      <Footer lang={lang} contacts={contactsConfig} />
+      <Footer
+        lang={lang}
+        contacts={contactsConfig}
+        products={productList.map((p) => ({ slug: p.slug, name: p.name }))}
+      />
     </>
   );
 }
