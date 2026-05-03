@@ -3,6 +3,8 @@ import { Check, Zap } from "lucide-react";
 import { type Lang, tr } from "../../lib/i18n";
 
 interface Plan {
+  /** Ключ тарифа в БД: free | pro | enterprise (Business). Если задан — используется для override planPrices/planNames вместо позиционного индекса. */
+  key?: string;
   name: string;
   price: string;
   period?: string;
@@ -62,8 +64,10 @@ export function SectionPricing({ content, lang = "ru", planPrices, planNames }: 
 
         <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
           {plans.map((plan, i) => {
-            // Если переданы planPrices — берём цену оттуда, иначе из контента
-            const priceKey = PRICE_KEYS[i];
+            // Override через planPrices/planNames применяем по plan.key (если задан),
+            // иначе по позиционному индексу — но только когда планов столько же, сколько ключей.
+            // Иначе ключи сдвигаются и Pro показывается как Free и т.п.
+            const priceKey = plan.key || (plans.length === PRICE_KEYS.length ? PRICE_KEYS[i] : undefined);
             const overridePrice =
               planPrices && priceKey && planPrices[priceKey] !== undefined
                 ? formatPrice(planPrices[priceKey])

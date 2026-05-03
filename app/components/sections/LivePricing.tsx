@@ -23,9 +23,13 @@ interface Props {
   product?: string;
 }
 
+// Ключи тарифов в БД (free + pro + enterprise=Business). Free в admin не сохраняется в plan_prices,
+// поэтому ниже мы достраиваем его в planPrices с ценой 0, иначе сдвигались бы названия и цены.
 const PRICE_KEYS = ["free", "pro", "enterprise"] as const;
+type PriceKey = typeof PRICE_KEYS[number];
 
 interface BuiltPlan {
+  key: PriceKey;
   name: string;
   price: string;
   period?: string;
@@ -44,10 +48,11 @@ export function LivePricing({ content, lang = "ru", product }: Props) {
   const [planPrices, setPlanPrices] = useState<Record<string, number> | undefined>(undefined);
   const [planNames, setPlanNames] = useState<Record<string, string> | undefined>(undefined);
   const [planFeatures, setPlanFeatures] = useState<Record<string, string[]> | undefined>(undefined);
+  const [planActive, setPlanActive] = useState<Record<string, boolean> | undefined>(undefined);
   const [loaded, setLoaded] = useState(false);
 
   useEffect(() => {
-    getAppSettings(["plan_prices", "plan_names", "plan_features"], product)
+    getAppSettings(["plan_prices", "plan_names", "plan_features", "plan_active"], product)
       .then((data) => {
         if (data.plan_prices && typeof data.plan_prices === "object") {
           setPlanPrices(data.plan_prices as Record<string, number>);
@@ -57,6 +62,9 @@ export function LivePricing({ content, lang = "ru", product }: Props) {
         }
         if (data.plan_features && typeof data.plan_features === "object") {
           setPlanFeatures(data.plan_features as Record<string, string[]>);
+        }
+        if (data.plan_active && typeof data.plan_active === "object") {
+          setPlanActive(data.plan_active as Record<string, boolean>);
         }
       })
       .catch(() => {})
@@ -73,19 +81,23 @@ export function LivePricing({ content, lang = "ru", product }: Props) {
   }
 
   let mergedContent = content;
-  if (!hasContentPlans && planPrices) {
+  if (!hasContentPlans) {
     const t = tr[lang];
+    // Free всегда 0 (в admin не сохраняется в plan_prices); добавляем явно чтобы не выпадал
+    const prices: Record<string, number> = { free: 0, ...(planPrices || {}) };
     const builtPlans: BuiltPlan[] = PRICE_KEYS
-      .filter((k) => planPrices[k] !== undefined)
+      .filter((k) => prices[k] !== undefined)
+      .filter((k) => !planActive || planActive[k] !== false)
       .map((k, i) => {
-        const name = (planNames && planNames[k]) || (k === "free" ? "Free" : k === "pro" ? "Pro" : "Enterprise");
+        const name = (planNames && planNames[k]) || (k === "free" ? "Free" : k === "pro" ? "Pro" : "Business");
         const features = (planFeatures && Array.isArray(planFeatures[k])) ? planFeatures[k] : [];
         return {
+          key: k,
           name,
-          price: formatPrice(planPrices[k]),
+          price: formatPrice(prices[k]),
           period: "мес",
           features,
-          highlighted: i === 1,
+          highlighted: k === "pro",
           cta_text: t.hero_cta1,
           cta_url: product ? `https://app.ezze.site/register?product=${product}` : "https://app.ezze.site/register",
         };
