@@ -193,13 +193,21 @@ function HomeContentInner({ sections, settings: initialSettings }: Props) {
             <p className="text-xl text-gray-600 dark:text-gray-400 mb-10 max-w-2xl mx-auto">{t.hero_subtitle}</p>
             <div className="flex flex-col sm:flex-row gap-4 justify-center">
               <Link
-                href="https://app.ezze.site/register"
+                href="#products"
+                onClick={(e) => {
+                  e.preventDefault();
+                  document.getElementById("products")?.scrollIntoView({ behavior: "smooth" });
+                }}
                 className="bg-indigo-600 text-white px-8 py-4 rounded-xl text-lg font-medium hover:bg-indigo-700 transition-colors"
               >
                 {ctaPrimary}
               </Link>
               <Link
                 href="#products"
+                onClick={(e) => {
+                  e.preventDefault();
+                  document.getElementById("products")?.scrollIntoView({ behavior: "smooth" });
+                }}
                 className="bg-white dark:bg-gray-800 text-indigo-600 dark:text-indigo-400 border border-indigo-200 dark:border-indigo-700 px-8 py-4 rounded-xl text-lg font-medium hover:bg-indigo-50 dark:hover:bg-gray-700 transition-colors"
               >
                 {ctaSecondary}
@@ -312,7 +320,9 @@ function HomeContentInner({ sections, settings: initialSettings }: Props) {
             title: t.cta_title,
             subtitle: t.cta_subtitle,
             button_text: t.cta_button,
-            button_url: "https://app.ezze.site/register",
+            // app.ezze.site = Beauty по конфигу. Чтобы не загонять всех в Beauty —
+            // ведём на грид продуктов на этой же странице.
+            button_url: "#products",
           }}
         />
       </main>

@@ -50,12 +50,16 @@ function HeaderInner({ product }: HeaderProps) {
 
   // Определяем URL кнопок:
   // - на /[slug] — Войти ведёт на сайт продукта, Начать → app.ezze.site/register?product=<slug>
-  // - на главной — Войти/Начать → app.ezze.site (нейтральный домен регистрации)
+  // - на главной — обе ведут к #products (где грид всех продуктов), т.к. app.ezze.site
+  //   физически развёрнут как Beauty (VITE_PRODUCT=beauty) и без выбора продукта попадёшь туда
   const productInfo = product ? PRODUCTS.find((p) => p.slug === product) : null;
-  const loginUrl = productInfo?.url || "https://app.ezze.site";
+  const loginUrl = productInfo?.url || `/?lang=${lang}#products`;
   const registerUrl = product
     ? `https://app.ezze.site/register?product=${product}`
-    : "https://app.ezze.site/register";
+    : `/?lang=${lang}#products`;
+  const isOnHome = pathname === "/";
+  const loginIsAnchor = !productInfo;
+  const registerIsAnchor = !product;
 
   function handleAnchor(e: React.MouseEvent<HTMLAnchorElement>, anchor: string) {
     if (pathname === "/") {
@@ -69,7 +73,17 @@ function HeaderInner({ product }: HeaderProps) {
   return (
     <header className="sticky top-0 z-50 bg-white/90 dark:bg-gray-950/90 backdrop-blur border-b border-gray-100 dark:border-gray-800">
       <div className="max-w-6xl mx-auto px-4 h-16 flex items-center justify-between">
-        <Link href="/" className="flex items-center gap-2 font-bold text-xl text-indigo-600 dark:text-indigo-400">
+        <Link
+          href="/"
+          onClick={(e) => {
+            // На главной — клик по логотипу скроллит вверх (плавно), без перезагрузки
+            if (pathname === "/") {
+              e.preventDefault();
+              window.scrollTo({ top: 0, behavior: "smooth" });
+            }
+          }}
+          className="relative z-[60] flex items-center gap-2 font-bold text-xl text-indigo-600 dark:text-indigo-400"
+        >
           <Zap size={22} />
           <span>Ezze</span>
         </Link>
@@ -93,8 +107,8 @@ function HeaderInner({ product }: HeaderProps) {
 
             {langOpen && (
               <>
-                {/* Backdrop */}
-                <div className="fixed inset-0 z-40" onClick={() => setLangOpen(false)} />
+                {/* Backdrop — z-30 чтобы не перекрывал Logo / Войти / Начать (z-60) */}
+                <div className="fixed inset-0 z-30" onClick={() => setLangOpen(false)} />
                 {/* Dropdown */}
                 <div className="absolute right-0 top-full mt-1.5 w-48 bg-white dark:bg-gray-900 border border-gray-200 dark:border-gray-700 rounded-xl shadow-lg z-50 py-1 overflow-hidden">
                   {LANGS.map((l) => (
@@ -123,11 +137,13 @@ function HeaderInner({ product }: HeaderProps) {
           </button>
 
           <Link href={loginUrl}
-            className="text-sm text-gray-600 dark:text-gray-400 hover:text-indigo-600 dark:hover:text-indigo-400 transition-colors ml-1">
+            onClick={(e) => { if (isOnHome && loginIsAnchor) handleAnchor(e, "products"); }}
+            className="relative z-[60] text-sm text-gray-600 dark:text-gray-400 hover:text-indigo-600 dark:hover:text-indigo-400 transition-colors ml-1">
             {t.login}
           </Link>
           <Link href={registerUrl}
-            className="text-sm bg-indigo-600 text-white px-4 py-2 rounded-lg hover:bg-indigo-700 transition-colors">
+            onClick={(e) => { if (isOnHome && registerIsAnchor) handleAnchor(e, "products"); }}
+            className="relative z-[60] text-sm bg-indigo-600 text-white px-4 py-2 rounded-lg hover:bg-indigo-700 transition-colors">
             {t.start_free}
           </Link>
         </div>
@@ -139,7 +155,14 @@ function HeaderInner({ product }: HeaderProps) {
 export default function Header({ product }: HeaderProps = {}) {
   return (
     <Suspense fallback={
-      <header className="sticky top-0 z-50 bg-white/90 dark:bg-gray-950/90 backdrop-blur border-b border-gray-100 dark:border-gray-800 h-16" />
+      <header className="sticky top-0 z-50 bg-white/90 dark:bg-gray-950/90 backdrop-blur border-b border-gray-100 dark:border-gray-800">
+        <div className="max-w-6xl mx-auto px-4 h-16 flex items-center">
+          <Link href="/" className="relative z-[60] flex items-center gap-2 font-bold text-xl text-indigo-600 dark:text-indigo-400">
+            <Zap size={22} />
+            <span>Ezze</span>
+          </Link>
+        </div>
+      </header>
     }>
       <HeaderInner product={product} />
     </Suspense>
