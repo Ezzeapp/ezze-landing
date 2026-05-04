@@ -34,8 +34,8 @@ export function SectionHero({ content, lang = "ru", fallback }: Props) {
   const badge = c.badge;
   const Icon = fallback.icon;
 
-  // Основная кнопка — регистрация (универсальный домен app.ezze.site)
-  const primaryUrl = c.cta_url || `https://app.ezze.site/register?product=${fallback.slug}`;
+  // Основная кнопка — регистрация прямо в кабинете продукта (не через hub picker)
+  const primaryUrl = c.cta_url || `${fallback.url}/register`;
   const primaryText = c.cta_text || t.start_free;
 
   // Вторичная кнопка — открыть приложение (если не coming-soon)

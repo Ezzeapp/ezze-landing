@@ -15,6 +15,7 @@ import { useEffect, useState } from "react";
 import { SectionPricing } from "./SectionPricing";
 import { getAppSettings } from "../../lib/supabase";
 import { type Lang, tr } from "../../lib/i18n";
+import { PRODUCTS } from "../../lib/defaults";
 
 interface Props {
   content: Record<string, unknown>;
@@ -85,10 +86,13 @@ export function LivePricing({ content, lang = "ru", product }: Props) {
     const t = tr[lang];
     // Free всегда 0 (в admin не сохраняется в plan_prices); добавляем явно чтобы не выпадал
     const prices: Record<string, number> = { free: 0, ...(planPrices || {}) };
+    // Регистрация прямо в кабинете продукта; на главной (без product) — к гриду продуктов
+    const productInfo = product ? PRODUCTS.find((p) => p.slug === product) : null;
+    const ctaUrl = productInfo ? `${productInfo.url}/register` : `/?lang=${lang}#products`;
     const builtPlans: BuiltPlan[] = PRICE_KEYS
       .filter((k) => prices[k] !== undefined)
       .filter((k) => !planActive || planActive[k] !== false)
-      .map((k, i) => {
+      .map((k) => {
         const name = (planNames && planNames[k]) || (k === "free" ? "Free" : k === "pro" ? "Pro" : "Business");
         const features = (planFeatures && Array.isArray(planFeatures[k])) ? planFeatures[k] : [];
         return {
@@ -99,7 +103,7 @@ export function LivePricing({ content, lang = "ru", product }: Props) {
           features,
           highlighted: k === "pro",
           cta_text: t.hero_cta1,
-          cta_url: product ? `https://app.ezze.site/register?product=${product}` : "https://app.ezze.site/register",
+          cta_url: ctaUrl,
         };
       });
 

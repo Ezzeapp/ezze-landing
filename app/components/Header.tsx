@@ -49,17 +49,16 @@ function HeaderInner({ product }: HeaderProps) {
   const t = tr[lang];
 
   // Определяем URL кнопок:
-  // - на /[slug] — Войти ведёт на сайт продукта, Начать → app.ezze.site/register?product=<slug>
-  // - на главной — обе ведут к #products (где грид всех продуктов), т.к. app.ezze.site
-  //   физически развёрнут как Beauty (VITE_PRODUCT=beauty) и без выбора продукта попадёшь туда
+  // - на /[slug] — Войти на сайт продукта (productUrl), Начать → productUrl/register напрямую
+  // - на главной — обе ведут к #products, т.к. app.ezze.site без выбора продукта = Beauty
   const productInfo = product ? PRODUCTS.find((p) => p.slug === product) : null;
   const loginUrl = productInfo?.url || `/?lang=${lang}#products`;
-  const registerUrl = product
-    ? `https://app.ezze.site/register?product=${product}`
+  const registerUrl = productInfo
+    ? `${productInfo.url}/register`
     : `/?lang=${lang}#products`;
   const isOnHome = pathname === "/";
   const loginIsAnchor = !productInfo;
-  const registerIsAnchor = !product;
+  const registerIsAnchor = !productInfo;
 
   function handleAnchor(e: React.MouseEvent<HTMLAnchorElement>, anchor: string) {
     if (pathname === "/") {
