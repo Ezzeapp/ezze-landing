@@ -1,42 +1,55 @@
-name: Deploy to VPS (ezze-landing)
+name: Deploy ezze-landing
 
 on:
   push:
-    branches:
-      - master
+    branches: [master]
+    paths-ignore:
+      - 'README.md'
+      - '.gitignore'
+  workflow_dispatch:
+
+concurrency:
+  group: deploy-${{ github.ref }}
+  cancel-in-progress: true
 
 jobs:
   deploy:
     runs-on: ubuntu-latest
+    timeout-minutes: 10
 
     steps:
-      - name: Checkout code
+      - name: Checkout
         uses: actions/checkout@v4
 
       - name: Setup Node.js
         uses: actions/setup-node@v4
         with:
-          node-version: "20"
-          cache: "npm"
+          node-version: 22
+          cache: npm
 
       - name: Install dependencies
-        run: npm ci
+        # Not 'npm ci' — cross-platform optional deps (e.g. @emnapi/*)
+        # break the lockfile on Linux runners; same fix as in app-ezze.
+        run: npm install --no-audit --no-fund
 
-      - name: Build static site
+      - name: Build (Next.js static export → out/)
         run: npm run build
-        env:
-          NEXT_PUBLIC_SUPABASE_URL: https://ezze.site
-          NEXT_PUBLIC_SUPABASE_ANON_KEY: ${{ secrets.SUPABASE_ANON_KEY }}
 
-      - name: Deploy to VPS
-        uses: appleboy/scp-action@v0.1.7
+      - name: Setup SSH agent
+        uses: webfactory/ssh-agent@v0.9.0
         with:
-          host: ${{ secrets.DEPLOY_HOST }}
-          username: ${{ secrets.DEPLOY_USER }}
-          key: ${{ secrets.DEPLOY_KEY }}
-          source: "out/*"
-          target: "/var/www/ezze-landing/"
-          strip_components: 1
+          ssh-private-key: ${{ secrets.VPS_SSH_KEY }}
 
-      - name: Notify success
-        run: echo "Deployed successfully to https://ezze.site"
+      - name: Add VPS to known_hosts
+        run: |
+          ssh-keyscan -t ed25519,rsa -p 22 ${{ secrets.VPS_HOST }} >> ~/.ssh/known_hosts
+
+      - name: Deploy via rsync (out/ → /var/www/ezze-landing/)
+        run: |
+          rsync -az --delete \
+            ./out/ ${{ secrets.VPS_USER }}@${{ secrets.VPS_HOST }}:${{ secrets.VPS_PATH }}
+
+      - name: Set ownership on VPS
+        run: |
+          ssh ${{ secrets.VPS_USER }}@${{ secrets.VPS_HOST }} \
+            "chown -R www-data:www-data ${{ secrets.VPS_PATH }}"
