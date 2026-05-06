@@ -2,20 +2,31 @@
 @custom-variant dark (&:where(.dark, .dark *));
 
 :root {
-  --background: #ffffff;
-  --foreground: #171717;
-  --primary: #6366f1;
-  --surface: #f9fafb;
-  --border: #e5e7eb;
-  --muted: #6b7280;
+  color-scheme: light;
+  --bg: #ffffff;
+  --fg: #0a0a0b;
+  --fg-muted: #71717a;
+  --border: #e4e4e7;
+  --surface: #fafafa;
+  --surface-2: #f4f4f5;
+  --brand: #6d28d9;
+  --brand-2: #4338ca;
+  --brand-fg: #ffffff;
+  --grid: #ececef;
 }
 
 .dark {
-  --background: #09090b;
-  --foreground: #fafafa;
-  --surface: #18181b;
-  --border: #27272a;
-  --muted: #a1a1aa;
+  color-scheme: dark;
+  --bg: #08080a;
+  --fg: #fafafa;
+  --fg-muted: #a1a1aa;
+  --border: #1f1f23;
+  --surface: #0e0e10;
+  --surface-2: #161618;
+  --brand: #a78bfa;
+  --brand-2: #818cf8;
+  --brand-fg: #0a0a0b;
+  --grid: #1a1a1d;
 }
 
 html {
@@ -24,7 +35,58 @@ html {
 }
 
 body {
-  background: var(--background);
-  color: var(--foreground);
-  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+  background: var(--bg);
+  color: var(--fg);
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Inter, sans-serif;
+  -webkit-font-smoothing: antialiased;
+  text-rendering: optimizeLegibility;
+}
+
+/* Subtle dot grid background used by hero */
+.bg-grid {
+  background-image: radial-gradient(circle, var(--grid) 1px, transparent 1px);
+  background-size: 24px 24px;
+}
+
+/* Soft mesh gradient — used as a backdrop layer */
+.bg-mesh {
+  background:
+    radial-gradient(60% 40% at 20% 0%, color-mix(in oklab, var(--brand) 22%, transparent) 0%, transparent 60%),
+    radial-gradient(50% 50% at 80% 20%, color-mix(in oklab, var(--brand-2) 18%, transparent) 0%, transparent 60%),
+    radial-gradient(40% 30% at 60% 100%, color-mix(in oklab, var(--brand) 14%, transparent) 0%, transparent 60%);
+}
+
+/* Glassmorphism card */
+.glass {
+  background: color-mix(in oklab, var(--surface) 70%, transparent);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  border: 1px solid color-mix(in oklab, var(--border) 70%, transparent);
+}
+
+/* Reveal-on-scroll */
+.reveal {
+  opacity: 0;
+  transform: translateY(8px);
+  transition: opacity 600ms ease, transform 600ms ease;
+}
+.reveal.in {
+  opacity: 1;
+  transform: none;
+}
+
+/* Pretty focus ring */
+:where(button, a):focus-visible {
+  outline: 2px solid var(--brand);
+  outline-offset: 2px;
+  border-radius: 8px;
+}
+
+/* Marquee for the trust bar */
+@keyframes marquee {
+  from { transform: translateX(0); }
+  to   { transform: translateX(-50%); }
+}
+.marquee-track {
+  animation: marquee 38s linear infinite;
 }

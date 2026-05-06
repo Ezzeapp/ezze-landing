@@ -4,7 +4,6 @@ import { Sparkles, Scissors, UtensilsCrossed } from "lucide-react";
 export type ModuleStatus = "available" | "soon";
 
 export interface ModulePlan {
-  /** Per-month price in UZS, 0 = free */
   price: number;
   limits: { ru: string; en: string; uz: string };
 }
@@ -12,10 +11,8 @@ export interface ModulePlan {
 export interface AppModule {
   slug: "cleaning" | "beauty" | "banket";
   status: ModuleStatus;
-  /** Hex used in gradient & accent, kept light enough for white text on top */
   accent: string;
   icon: LucideIcon;
-  iconName: string;
   release?: string;
   plans: {
     free: ModulePlan;
@@ -30,7 +27,6 @@ export const MODULES: AppModule[] = [
     status: "available",
     accent: "#0ea5e9",
     icon: Sparkles,
-    iconName: "Sparkles",
     plans: {
       free: {
         price: 0,
@@ -53,7 +49,7 @@ export const MODULES: AppModule[] = [
         limits: {
           ru: "Без лимитов · API · приоритет поддержки",
           en: "Unlimited · API · priority support",
-          uz: "Cheksiz · API · ustuvor qoʻllab-quvvatlash",
+          uz: "Cheksiz · API · ustuvor qo'llab-quvvatlash",
         },
       },
     },
@@ -63,7 +59,6 @@ export const MODULES: AppModule[] = [
     status: "soon",
     accent: "#ec4899",
     icon: Scissors,
-    iconName: "Scissors",
     release: "Q3 2026",
     plans: {
       free: {
@@ -97,7 +92,6 @@ export const MODULES: AppModule[] = [
     status: "soon",
     accent: "#a855f7",
     icon: UtensilsCrossed,
-    iconName: "UtensilsCrossed",
     release: "Q4 2026",
     plans: {
       free: {
@@ -127,13 +121,3 @@ export const MODULES: AppModule[] = [
     },
   },
 ];
-
-export const APP_URL = "https://app.ezze.site";
-
-export function registerUrl(plan?: string, product?: string) {
-  const p = new URLSearchParams();
-  if (plan) p.set("plan", plan);
-  if (product) p.set("product", product);
-  const qs = p.toString();
-  return `${APP_URL}/register${qs ? `?${qs}` : ""}`;
-}

@@ -1,24 +1,21 @@
 "use client";
 import Link from "next/link";
 import { Zap, Sun, Moon, ChevronDown } from "lucide-react";
-import { useState, useEffect, Suspense } from "react";
-import { useRouter, useSearchParams, usePathname } from "next/navigation";
-import { type Lang, LANGS, LANG_LABELS, LANG_NAMES } from "../lib/i18n";
+import { Suspense, useEffect, useState } from "react";
+import { usePathname, useRouter, useSearchParams } from "next/navigation";
+import { type Lang, LANGS, LANG_LABELS, LANG_NAMES, APP_URL } from "../lib/i18n";
 import { tr } from "../lib/content";
-import { APP_URL } from "../lib/modules";
 
 function HeaderInner() {
-  const [isDark, setIsDark] = useState(false);
-  const [lang, setLang] = useState<Lang>("ru");
-  const [langOpen, setLangOpen] = useState(false);
   const router = useRouter();
   const pathname = usePathname();
   const searchParams = useSearchParams();
+  const [isDark, setIsDark] = useState(false);
+  const [lang, setLang] = useState<Lang>("ru");
+  const [langOpen, setLangOpen] = useState(false);
 
   useEffect(() => {
-    const theme = localStorage.getItem("ezze_theme");
-    setIsDark(theme === "dark");
-    if (theme === "dark") document.documentElement.classList.add("dark");
+    setIsDark(document.documentElement.classList.contains("dark"));
     const sp = searchParams.get("lang") as Lang | null;
     const saved = localStorage.getItem("ezze_lang") as Lang | null;
     setLang(sp ?? saved ?? "ru");
@@ -27,12 +24,11 @@ function HeaderInner() {
   function toggleTheme() {
     const next = !isDark;
     setIsDark(next);
-    const cl = document.documentElement.classList;
     if (next) {
-      cl.add("dark");
+      document.documentElement.classList.add("dark");
       localStorage.setItem("ezze_theme", "dark");
     } else {
-      cl.remove("dark");
+      document.documentElement.classList.remove("dark");
       localStorage.setItem("ezze_theme", "light");
     }
   }
@@ -46,18 +42,18 @@ function HeaderInner() {
     router.push(`${pathname}?${p.toString()}`);
   }
 
-  const t = tr(lang);
-
-  function handleAnchor(e: React.MouseEvent<HTMLAnchorElement>, id: string) {
+  function anchor(e: React.MouseEvent<HTMLAnchorElement>, id: string) {
     if (pathname === "/") {
       e.preventDefault();
       document.getElementById(id)?.scrollIntoView({ behavior: "smooth" });
     }
   }
 
+  const t = tr(lang);
+
   return (
-    <header className="sticky top-0 z-50 bg-white/90 dark:bg-gray-950/90 backdrop-blur border-b border-gray-100 dark:border-gray-800">
-      <div className="max-w-6xl mx-auto px-4 h-16 flex items-center justify-between">
+    <header className="sticky top-0 z-40 border-b border-zinc-200/80 dark:border-zinc-800/80 bg-white/80 dark:bg-zinc-950/80 backdrop-blur">
+      <div className="max-w-6xl mx-auto px-6 h-16 flex items-center justify-between">
         <Link
           href="/"
           onClick={(e) => {
@@ -66,69 +62,51 @@ function HeaderInner() {
               window.scrollTo({ top: 0, behavior: "smooth" });
             }
           }}
-          className="flex items-center gap-2 font-bold text-xl text-indigo-600 dark:text-indigo-400"
+          className="flex items-center gap-2 font-semibold text-lg"
         >
-          <Zap size={22} />
+          <Zap size={20} className="text-violet-600 dark:text-violet-400" />
           <span>Ezze</span>
         </Link>
 
-        <nav className="hidden md:flex items-center gap-6 text-sm text-gray-600 dark:text-gray-400">
-          <Link
-            href="/#modules"
-            onClick={(e) => handleAnchor(e, "modules")}
-            className="hover:text-indigo-600 dark:hover:text-indigo-400 transition-colors"
-          >
+        <nav className="hidden md:flex items-center gap-7 text-sm text-zinc-600 dark:text-zinc-400">
+          <Link href="/#features" onClick={(e) => anchor(e, "features")} className="hover:text-zinc-900 dark:hover:text-white transition">
+            {t.nav_features}
+          </Link>
+          <Link href="/#modules" onClick={(e) => anchor(e, "modules")} className="hover:text-zinc-900 dark:hover:text-white transition">
             {t.nav_modules}
           </Link>
-          <Link
-            href="/#pricing"
-            onClick={(e) => handleAnchor(e, "pricing")}
-            className="hover:text-indigo-600 dark:hover:text-indigo-400 transition-colors"
-          >
+          <Link href="/#pricing" onClick={(e) => anchor(e, "pricing")} className="hover:text-zinc-900 dark:hover:text-white transition">
             {t.nav_pricing}
           </Link>
-          <Link
-            href="/#faq"
-            onClick={(e) => handleAnchor(e, "faq")}
-            className="hover:text-indigo-600 dark:hover:text-indigo-400 transition-colors"
-          >
-            {t.nav_about}
+          <Link href="/#faq" onClick={(e) => anchor(e, "faq")} className="hover:text-zinc-900 dark:hover:text-white transition">
+            {t.nav_faq}
           </Link>
         </nav>
 
         <div className="flex items-center gap-2">
-          <div className="relative hidden sm:block mr-1">
+          <div className="relative hidden sm:block">
             <button
               onClick={() => setLangOpen(!langOpen)}
-              className="flex items-center gap-1 text-xs px-2.5 py-1.5 rounded-lg border border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-900 text-gray-700 dark:text-gray-300 font-bold cursor-pointer hover:border-indigo-300 dark:hover:border-indigo-600 transition-colors"
+              className="flex items-center gap-1 text-xs px-2.5 py-1.5 rounded-lg border border-zinc-200 dark:border-zinc-800 bg-white dark:bg-zinc-900 text-zinc-700 dark:text-zinc-300 font-semibold hover:border-violet-300 dark:hover:border-violet-700 transition"
             >
               {LANG_LABELS[lang]}
-              <ChevronDown
-                size={11}
-                className={`transition-transform ${langOpen ? "rotate-180" : ""}`}
-              />
+              <ChevronDown size={11} className={`transition-transform ${langOpen ? "rotate-180" : ""}`} />
             </button>
-
             {langOpen && (
               <>
-                <div
-                  className="fixed inset-0 z-30"
-                  onClick={() => setLangOpen(false)}
-                />
-                <div className="absolute right-0 top-full mt-1.5 w-48 bg-white dark:bg-gray-900 border border-gray-200 dark:border-gray-700 rounded-xl shadow-lg z-50 py-1 overflow-hidden">
+                <div className="fixed inset-0 z-30" onClick={() => setLangOpen(false)} />
+                <div className="absolute right-0 top-full mt-1.5 w-48 bg-white dark:bg-zinc-900 border border-zinc-200 dark:border-zinc-800 rounded-xl shadow-lg z-50 py-1 overflow-hidden">
                   {LANGS.map((l) => (
                     <button
                       key={l}
                       onClick={() => switchLang(l)}
-                      className={`w-full flex items-center gap-3 px-3 py-2 text-sm transition-colors text-left ${
+                      className={`w-full flex items-center gap-3 px-3 py-2 text-sm transition text-left ${
                         l === lang
-                          ? "bg-indigo-50 dark:bg-indigo-900/30 text-indigo-600 dark:text-indigo-400"
-                          : "text-gray-700 dark:text-gray-300 hover:bg-gray-50 dark:hover:bg-gray-800"
+                          ? "bg-violet-50 dark:bg-violet-900/30 text-violet-700 dark:text-violet-300"
+                          : "text-zinc-700 dark:text-zinc-300 hover:bg-zinc-50 dark:hover:bg-zinc-800"
                       }`}
                     >
-                      <span className="font-bold text-xs w-7 shrink-0">
-                        {LANG_LABELS[l]}
-                      </span>
+                      <span className="font-bold text-xs w-7 shrink-0">{LANG_LABELS[l]}</span>
                       <span>{LANG_NAMES[l]}</span>
                     </button>
                   ))}
@@ -140,20 +118,20 @@ function HeaderInner() {
           <button
             onClick={toggleTheme}
             aria-label="Toggle theme"
-            className="p-1.5 rounded-lg text-gray-500 hover:text-gray-900 hover:bg-gray-100 dark:text-gray-400 dark:hover:text-white dark:hover:bg-gray-800 transition-colors"
+            className="p-1.5 rounded-lg text-zinc-500 hover:text-zinc-900 hover:bg-zinc-100 dark:text-zinc-400 dark:hover:text-white dark:hover:bg-zinc-800 transition"
           >
             {isDark ? <Sun size={16} /> : <Moon size={16} />}
           </button>
 
           <a
             href={`${APP_URL}/login`}
-            className="text-sm text-gray-600 dark:text-gray-400 hover:text-indigo-600 dark:hover:text-indigo-400 transition-colors ml-1"
+            className="text-sm text-zinc-600 dark:text-zinc-400 hover:text-zinc-900 dark:hover:text-white transition px-2"
           >
             {t.login}
           </a>
           <a
             href={`${APP_URL}/register`}
-            className="text-sm bg-indigo-600 text-white px-4 py-2 rounded-lg hover:bg-indigo-700 transition-colors"
+            className="text-sm bg-zinc-900 dark:bg-white text-white dark:text-zinc-900 px-4 py-2 rounded-lg font-medium hover:bg-zinc-800 dark:hover:bg-zinc-200 transition shadow-sm"
           >
             {t.start_free}
           </a>
@@ -167,13 +145,10 @@ export default function Header() {
   return (
     <Suspense
       fallback={
-        <header className="sticky top-0 z-50 bg-white/90 dark:bg-gray-950/90 backdrop-blur border-b border-gray-100 dark:border-gray-800">
-          <div className="max-w-6xl mx-auto px-4 h-16 flex items-center">
-            <Link
-              href="/"
-              className="flex items-center gap-2 font-bold text-xl text-indigo-600 dark:text-indigo-400"
-            >
-              <Zap size={22} />
+        <header className="sticky top-0 z-40 border-b border-zinc-200/80 dark:border-zinc-800/80 bg-white/80 dark:bg-zinc-950/80 backdrop-blur">
+          <div className="max-w-6xl mx-auto px-6 h-16 flex items-center">
+            <Link href="/" className="flex items-center gap-2 font-semibold text-lg">
+              <Zap size={20} className="text-violet-600 dark:text-violet-400" />
               <span>Ezze</span>
             </Link>
           </div>

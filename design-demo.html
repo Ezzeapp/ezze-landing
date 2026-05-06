@@ -1,0 +1,547 @@
+<!doctype html>
+<html lang="ru">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Ezze — 5 design variants</title>
+<script src="https://cdn.tailwindcss.com?plugins=typography"></script>
+<style>
+  body { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Inter, sans-serif; }
+  .variant { display: none; }
+  .variant.active { display: block; }
+  .picker-btn.active { background: #18181b; color: #fff; }
+  /* dot grid */
+  .bg-grid {
+    background-image: radial-gradient(circle, #d4d4d8 1px, transparent 1px);
+    background-size: 24px 24px;
+  }
+  .dark .bg-grid {
+    background-image: radial-gradient(circle, #27272a 1px, transparent 1px);
+  }
+  /* mesh */
+  .bg-mesh-violet {
+    background:
+      radial-gradient(60% 40% at 20% 0%, rgba(139,92,246,0.35) 0%, transparent 60%),
+      radial-gradient(50% 50% at 80% 20%, rgba(99,102,241,0.30) 0%, transparent 60%),
+      radial-gradient(40% 30% at 60% 100%, rgba(139,92,246,0.20) 0%, transparent 60%);
+  }
+  .bg-mesh-emerald {
+    background:
+      radial-gradient(70% 50% at 30% 0%, rgba(16,185,129,0.20) 0%, transparent 60%),
+      radial-gradient(50% 60% at 90% 30%, rgba(20,184,166,0.18) 0%, transparent 60%);
+  }
+  .bg-mesh-warm {
+    background:
+      radial-gradient(60% 40% at 20% 10%, rgba(251,146,60,0.30) 0%, transparent 60%),
+      radial-gradient(50% 50% at 80% 30%, rgba(244,63,94,0.25) 0%, transparent 60%);
+  }
+  .glass {
+    background: rgba(24,24,27,0.5);
+    backdrop-filter: blur(12px);
+    border: 1px solid rgba(255,255,255,0.08);
+  }
+  .glass-light {
+    background: rgba(255,255,255,0.7);
+    backdrop-filter: blur(12px);
+    border: 1px solid rgba(0,0,0,0.06);
+  }
+  /* hand-drawn squiggle */
+  .squiggle {
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 6'%3E%3Cpath d='M0 3 q 5 -3 10 0 t 10 0 t 10 0 t 10 0 t 10 0 t 10 0 t 10 0 t 10 0 t 10 0' stroke='%23fb923c' stroke-width='2' fill='none'/%3E%3C/svg%3E");
+    background-repeat: repeat-x;
+    background-size: 100px 6px;
+    background-position: 0 100%;
+    padding-bottom: 8px;
+  }
+  /* Stripe-like card shadow */
+  .stripe-card {
+    box-shadow: 0 1px 2px rgba(0,0,0,0.04), 0 12px 24px -8px rgba(0,0,0,0.08), 0 24px 48px -12px rgba(99,102,241,0.12);
+  }
+  /* Apple-style inset shadow */
+  .apple-card {
+    box-shadow: inset 0 1px 0 rgba(255,255,255,0.06), 0 30px 60px -20px rgba(0,0,0,0.5);
+  }
+  /* Supabase-like terminal */
+  .terminal {
+    font-family: ui-monospace, "SF Mono", "Cascadia Code", Menlo, monospace;
+    font-size: 13px;
+    background: #0a0a0a;
+    border: 1px solid #18181b;
+    border-radius: 12px;
+  }
+  /* Cosmos pop-out badge */
+  .pop {
+    box-shadow: 4px 4px 0 #000;
+  }
+  /* slow rotate logo trust */
+  @keyframes scroll-x { from { transform: translateX(0) } to { transform: translateX(-50%) } }
+  .marquee { animation: scroll-x 30s linear infinite; }
+</style>
+</head>
+<body class="bg-zinc-100">
+
+<!-- Sticky picker -->
+<div class="sticky top-0 z-50 bg-white/95 backdrop-blur border-b border-zinc-200 px-4 py-3">
+  <div class="max-w-6xl mx-auto flex items-center gap-2 flex-wrap">
+    <strong class="text-sm text-zinc-700 mr-2">Выберите вариант:</strong>
+    <button class="picker-btn active text-xs px-3 py-1.5 rounded-lg border border-zinc-300" data-target="v1">1 · Vercel-dark</button>
+    <button class="picker-btn text-xs px-3 py-1.5 rounded-lg border border-zinc-300" data-target="v2">2 · Stripe-light</button>
+    <button class="picker-btn text-xs px-3 py-1.5 rounded-lg border border-zinc-300" data-target="v3">3 · Supabase-tech</button>
+    <button class="picker-btn text-xs px-3 py-1.5 rounded-lg border border-zinc-300" data-target="v4">4 · Apple-premium</button>
+    <button class="picker-btn text-xs px-3 py-1.5 rounded-lg border border-zinc-300" data-target="v5">5 · Cosmos-playful</button>
+  </div>
+</div>
+
+<!-- ============================================================ -->
+<!-- VARIANT 1: VERCEL-DARK (минимализм, gradient mesh, моно-акцент) -->
+<!-- ============================================================ -->
+<section id="v1" class="variant active">
+  <div class="dark bg-zinc-950 text-zinc-100 min-h-screen relative overflow-hidden">
+    <div class="absolute inset-0 bg-mesh-violet pointer-events-none"></div>
+    <div class="absolute inset-0 bg-grid opacity-40 pointer-events-none"></div>
+
+    <header class="relative z-10 border-b border-zinc-800/50">
+      <div class="max-w-6xl mx-auto px-6 h-16 flex items-center justify-between">
+        <div class="flex items-center gap-2 font-semibold">
+          <svg class="size-5 text-violet-400" viewBox="0 0 24 24" fill="currentColor"><path d="M13 2L3 14h7l-1 8 10-12h-7z"/></svg>
+          Ezze
+        </div>
+        <nav class="hidden md:flex items-center gap-7 text-sm text-zinc-400">
+          <a class="hover:text-white" href="#">Возможности</a>
+          <a class="hover:text-white" href="#">Модули</a>
+          <a class="hover:text-white" href="#">Тарифы</a>
+        </nav>
+        <div class="flex items-center gap-3 text-sm">
+          <a class="text-zinc-400 hover:text-white" href="#">Войти</a>
+          <a class="bg-white text-black px-3.5 py-1.5 rounded-lg font-medium hover:bg-zinc-200" href="#">Начать →</a>
+        </div>
+      </div>
+    </header>
+
+    <div class="relative z-10 max-w-6xl mx-auto px-6 pt-20 pb-32 text-center">
+      <a class="inline-flex items-center gap-2 text-xs px-3 py-1 rounded-full border border-zinc-800 bg-zinc-900/60 mb-8" href="#">
+        <span class="size-1.5 rounded-full bg-violet-400"></span>
+        Новое: модуль Клининг доступен
+        <span class="text-zinc-500">→</span>
+      </a>
+      <h1 class="text-6xl md:text-7xl font-bold tracking-tight">
+        Управляйте бизнесом<br/>
+        <span class="bg-gradient-to-r from-violet-400 via-fuchsia-400 to-violet-400 bg-clip-text text-transparent">без хаоса.</span>
+      </h1>
+      <p class="mt-6 text-xl text-zinc-400 max-w-2xl mx-auto">
+        Клиенты, заказы, расписание и команда — в одной системе. Запустите за 5 минут.
+      </p>
+      <div class="mt-10 flex items-center justify-center gap-3 flex-wrap">
+        <a class="bg-white text-black px-6 py-3 rounded-lg font-medium hover:bg-zinc-200" href="#">Начать бесплатно</a>
+        <a class="border border-zinc-700 text-white px-6 py-3 rounded-lg font-medium hover:bg-zinc-900" href="#">Посмотреть демо</a>
+      </div>
+      <p class="mt-6 text-sm text-zinc-500">Без карты · Free-план без срока действия</p>
+    </div>
+
+    <!-- Modules -->
+    <div class="relative z-10 max-w-6xl mx-auto px-6 pb-20">
+      <div class="grid md:grid-cols-3 gap-4">
+        <div class="rounded-2xl border border-zinc-800 bg-zinc-900/50 p-6 hover:border-violet-500/40 transition">
+          <div class="size-10 rounded-lg bg-sky-500/15 flex items-center justify-center mb-4">
+            <svg class="size-5 text-sky-400" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 3v4"/><path d="M19 17v4"/><path d="M3 5h4"/><path d="M17 19h4"/><path d="M12 12c-1.5 0-3-.5-4-1.5C7 9.5 6.5 8 6.5 6.5c0 0 4-.5 5.5 1s1.5 5.5 1.5 5.5z"/></svg>
+          </div>
+          <div class="flex items-center gap-2 mb-1">
+            <h3 class="font-semibold text-lg">Клининг</h3>
+            <span class="text-[10px] uppercase tracking-wide bg-emerald-500/15 text-emerald-400 px-1.5 py-0.5 rounded">Доступен</span>
+          </div>
+          <p class="text-sm text-zinc-400">Заказы на уборку, выезды, услуги по часам и площади.</p>
+        </div>
+        <div class="rounded-2xl border border-zinc-800 bg-zinc-900/50 p-6">
+          <div class="size-10 rounded-lg bg-pink-500/15 flex items-center justify-center mb-4">
+            <svg class="size-5 text-pink-400" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="6" cy="6" r="3"/><circle cx="6" cy="18" r="3"/><line x1="20" y1="4" x2="8.12" y2="15.88"/><line x1="14.47" y1="14.48" x2="20" y2="20"/><line x1="8.12" y1="8.12" x2="12" y2="12"/></svg>
+          </div>
+          <div class="flex items-center gap-2 mb-1">
+            <h3 class="font-semibold text-lg">Бьюти</h3>
+            <span class="text-[10px] uppercase tracking-wide bg-zinc-700 text-zinc-400 px-1.5 py-0.5 rounded">Скоро · Q3</span>
+          </div>
+          <p class="text-sm text-zinc-400">Запись клиентов к мастерам, расписание, онлайн-бронь.</p>
+        </div>
+        <div class="rounded-2xl border border-zinc-800 bg-zinc-900/50 p-6">
+          <div class="size-10 rounded-lg bg-purple-500/15 flex items-center justify-center mb-4">
+            <svg class="size-5 text-purple-400" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 11h18l-2 9H5z"/><path d="M11 4l-1 4"/><path d="M13 4l1 4"/></svg>
+          </div>
+          <div class="flex items-center gap-2 mb-1">
+            <h3 class="font-semibold text-lg">Банкеты</h3>
+            <span class="text-[10px] uppercase tracking-wide bg-zinc-700 text-zinc-400 px-1.5 py-0.5 rounded">Скоро · Q4</span>
+          </div>
+          <p class="text-sm text-zinc-400">События, гости, площадки, депозиты, многодневные брони.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============================================================ -->
+<!-- VARIANT 2: STRIPE-LIGHT (мягкий, белый, soft shadows) -->
+<!-- ============================================================ -->
+<section id="v2" class="variant">
+  <div class="bg-gradient-to-b from-indigo-50/40 via-white to-white text-zinc-900 min-h-screen">
+    <header class="border-b border-zinc-100 bg-white/80 backdrop-blur sticky top-0 z-30">
+      <div class="max-w-6xl mx-auto px-6 h-16 flex items-center justify-between">
+        <div class="flex items-center gap-2 font-semibold">
+          <svg class="size-5 text-indigo-600" viewBox="0 0 24 24" fill="currentColor"><path d="M13 2L3 14h7l-1 8 10-12h-7z"/></svg>
+          Ezze
+        </div>
+        <nav class="hidden md:flex items-center gap-7 text-sm text-zinc-600">
+          <a class="hover:text-zinc-900" href="#">Возможности</a>
+          <a class="hover:text-zinc-900" href="#">Модули</a>
+          <a class="hover:text-zinc-900" href="#">Тарифы</a>
+        </nav>
+        <div class="flex items-center gap-3 text-sm">
+          <a class="text-zinc-600 hover:text-zinc-900" href="#">Войти</a>
+          <a class="bg-indigo-600 text-white px-4 py-2 rounded-lg font-medium hover:bg-indigo-700 stripe-card" href="#">Начать →</a>
+        </div>
+      </div>
+    </header>
+
+    <div class="max-w-6xl mx-auto px-6 pt-16 pb-20 grid md:grid-cols-2 gap-10 items-center">
+      <div>
+        <div class="inline-flex items-center gap-2 text-xs px-3 py-1 rounded-full border border-indigo-100 bg-indigo-50 text-indigo-700 mb-6">
+          <span class="size-1.5 rounded-full bg-indigo-500"></span>
+          Платформа для сервисного бизнеса
+        </div>
+        <h1 class="text-5xl md:text-6xl font-bold tracking-tight">
+          Бизнес <span class="text-indigo-600">без хаоса</span>.
+        </h1>
+        <p class="mt-5 text-lg text-zinc-600 max-w-md">
+          Клиенты, заказы, расписание и команда — в одной системе. Подключите модуль и работайте.
+        </p>
+        <div class="mt-8 flex items-center gap-3 flex-wrap">
+          <a class="bg-zinc-900 text-white px-5 py-2.5 rounded-lg font-medium hover:bg-zinc-800 stripe-card" href="#">Попробовать бесплатно</a>
+          <a class="text-zinc-700 px-5 py-2.5 rounded-lg font-medium hover:bg-zinc-100" href="#">Посмотреть модули →</a>
+        </div>
+        <div class="mt-10 flex items-center gap-6 text-xs text-zinc-500">
+          <div><strong class="text-2xl text-zinc-900 block">99.9%</strong>uptime</div>
+          <div><strong class="text-2xl text-zinc-900 block">5 мин</strong>запуск</div>
+          <div><strong class="text-2xl text-zinc-900 block">3</strong>языка</div>
+        </div>
+      </div>
+
+      <!-- Mockup card -->
+      <div class="stripe-card rounded-2xl border border-zinc-200 bg-white p-5 transform rotate-1 hover:rotate-0 transition">
+        <div class="flex items-center gap-1.5 pb-3 border-b border-zinc-100 mb-3">
+          <span class="size-2.5 rounded-full bg-rose-400"></span>
+          <span class="size-2.5 rounded-full bg-amber-400"></span>
+          <span class="size-2.5 rounded-full bg-emerald-400"></span>
+          <span class="ml-3 text-xs text-zinc-400">app.ezze.site/orders</span>
+        </div>
+        <div class="space-y-2">
+          <div class="flex items-center gap-2 p-2 rounded bg-emerald-50">
+            <span class="size-1.5 rounded-full bg-emerald-500"></span>
+            <span class="text-sm font-medium flex-1">Иван Иванов · 14:30</span>
+            <span class="text-xs text-emerald-700">Выполнен</span>
+          </div>
+          <div class="flex items-center gap-2 p-2 rounded bg-amber-50">
+            <span class="size-1.5 rounded-full bg-amber-500"></span>
+            <span class="text-sm font-medium flex-1">Анна Соколова · 16:00</span>
+            <span class="text-xs text-amber-700">В работе</span>
+          </div>
+          <div class="flex items-center gap-2 p-2 rounded bg-blue-50">
+            <span class="size-1.5 rounded-full bg-blue-500"></span>
+            <span class="text-sm font-medium flex-1">Петр Кузнецов · 18:15</span>
+            <span class="text-xs text-blue-700">Запланирован</span>
+          </div>
+          <div class="flex justify-between pt-3 border-t border-zinc-100 text-sm">
+            <span class="text-zinc-500">Сегодня</span>
+            <span class="font-semibold">3 заказа · 450 000 сум</span>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Modules cards (clean, soft shadow) -->
+    <div class="max-w-6xl mx-auto px-6 pb-20">
+      <h2 class="text-3xl font-bold text-center mb-2">Модули</h2>
+      <p class="text-center text-zinc-600 mb-10">Подключите только то, что нужно</p>
+      <div class="grid md:grid-cols-3 gap-5">
+        <div class="rounded-2xl border border-zinc-200 bg-white p-6 stripe-card">
+          <div class="size-12 rounded-xl bg-sky-500 flex items-center justify-center mb-4">
+            <svg class="size-6 text-white" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 3v4"/><path d="M19 17v4"/><path d="M3 5h4"/><path d="M17 19h4"/><path d="M12 12c-1.5 0-3-.5-4-1.5C7 9.5 6.5 8 6.5 6.5c0 0 4-.5 5.5 1s1.5 5.5 1.5 5.5z"/></svg>
+          </div>
+          <h3 class="font-semibold text-lg flex items-center gap-2">Клининг <span class="text-[10px] uppercase bg-emerald-100 text-emerald-700 px-1.5 py-0.5 rounded">Доступен</span></h3>
+          <p class="text-sm text-zinc-600 mt-1">Заказы на уборку, выезды, услуги по часам и площади.</p>
+        </div>
+        <div class="rounded-2xl border border-zinc-200 bg-white p-6 stripe-card opacity-70">
+          <div class="size-12 rounded-xl bg-pink-500 flex items-center justify-center mb-4">
+            <svg class="size-6 text-white" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="6" cy="6" r="3"/><circle cx="6" cy="18" r="3"/><line x1="20" y1="4" x2="8.12" y2="15.88"/></svg>
+          </div>
+          <h3 class="font-semibold text-lg flex items-center gap-2">Бьюти <span class="text-[10px] uppercase bg-zinc-100 text-zinc-500 px-1.5 py-0.5 rounded">Q3 2026</span></h3>
+          <p class="text-sm text-zinc-600 mt-1">Запись клиентов к мастерам, расписание.</p>
+        </div>
+        <div class="rounded-2xl border border-zinc-200 bg-white p-6 stripe-card opacity-70">
+          <div class="size-12 rounded-xl bg-purple-500 flex items-center justify-center mb-4">
+            <svg class="size-6 text-white" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 11h18l-2 9H5z"/></svg>
+          </div>
+          <h3 class="font-semibold text-lg flex items-center gap-2">Банкеты <span class="text-[10px] uppercase bg-zinc-100 text-zinc-500 px-1.5 py-0.5 rounded">Q4 2026</span></h3>
+          <p class="text-sm text-zinc-600 mt-1">События, гости, депозиты, многодневные брони.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============================================================ -->
+<!-- VARIANT 3: SUPABASE-TECH (тёмный, emerald, code-aesthetic) -->
+<!-- ============================================================ -->
+<section id="v3" class="variant">
+  <div class="dark bg-black text-zinc-100 min-h-screen relative overflow-hidden">
+    <div class="absolute inset-0 bg-mesh-emerald pointer-events-none"></div>
+    <div class="absolute inset-0 bg-grid opacity-30 pointer-events-none"></div>
+
+    <header class="relative z-10 border-b border-zinc-900">
+      <div class="max-w-6xl mx-auto px-6 h-16 flex items-center justify-between">
+        <div class="flex items-center gap-2 font-mono font-semibold text-emerald-400">
+          ezze<span class="text-zinc-600">/</span><span class="text-zinc-400">platform</span>
+        </div>
+        <nav class="hidden md:flex items-center gap-6 text-sm text-zinc-400 font-mono">
+          <a class="hover:text-emerald-400" href="#">/features</a>
+          <a class="hover:text-emerald-400" href="#">/modules</a>
+          <a class="hover:text-emerald-400" href="#">/pricing</a>
+          <a class="hover:text-emerald-400" href="#">/docs</a>
+        </nav>
+        <div class="flex items-center gap-3 text-sm">
+          <a class="text-zinc-400 hover:text-white font-mono" href="#">$ login</a>
+          <a class="bg-emerald-500 text-black px-3.5 py-1.5 rounded font-mono font-medium hover:bg-emerald-400" href="#">$ start</a>
+        </div>
+      </div>
+    </header>
+
+    <div class="relative z-10 max-w-6xl mx-auto px-6 pt-20 pb-20 grid md:grid-cols-2 gap-12 items-center">
+      <div>
+        <div class="inline-flex items-center gap-2 text-xs font-mono px-3 py-1 rounded-full border border-emerald-500/30 bg-emerald-500/10 text-emerald-400 mb-6">
+          ▸ v0.10 · cleaning module live
+        </div>
+        <h1 class="text-5xl md:text-6xl font-bold tracking-tight">
+          Платформа<br/>
+          <span class="text-emerald-400 font-mono">для бизнеса</span>
+        </h1>
+        <p class="mt-6 text-lg text-zinc-400 max-w-md">
+          Multi-tenant. Realtime. Row-level security. Три языка из коробки. Деплой за 5 минут.
+        </p>
+        <div class="mt-8 flex items-center gap-3 flex-wrap">
+          <a class="bg-emerald-500 text-black px-5 py-2.5 rounded font-mono font-medium hover:bg-emerald-400" href="#">$ ezze deploy</a>
+          <a class="border border-zinc-800 text-white px-5 py-2.5 rounded font-mono hover:bg-zinc-900" href="#">$ docs</a>
+        </div>
+      </div>
+
+      <!-- Terminal mockup -->
+      <div class="terminal p-5 text-emerald-400">
+        <div class="flex items-center gap-1.5 pb-3 mb-3 border-b border-zinc-900">
+          <span class="size-2.5 rounded-full bg-rose-500"></span>
+          <span class="size-2.5 rounded-full bg-amber-500"></span>
+          <span class="size-2.5 rounded-full bg-emerald-500"></span>
+          <span class="ml-3 text-xs text-zinc-500">~/your-business</span>
+        </div>
+        <div class="text-zinc-500">$ <span class="text-emerald-400">ezze init --product=cleaning</span></div>
+        <div class="text-zinc-400">✓ Organization created</div>
+        <div class="text-zinc-400">✓ RLS policies applied</div>
+        <div class="text-zinc-400">✓ Realtime channels live</div>
+        <div class="text-zinc-400">✓ Auth + invites configured</div>
+        <div class="mt-2 text-zinc-500">$ <span class="text-emerald-400">ezze status</span></div>
+        <div class="text-zinc-400">orders     <span class="text-emerald-400">●</span> 3 today / 12 this week</div>
+        <div class="text-zinc-400">team       <span class="text-emerald-400">●</span> 5 active</div>
+        <div class="text-zinc-400">uptime     <span class="text-emerald-400">●</span> 99.97%</div>
+        <div class="mt-2 text-zinc-600">$ <span class="animate-pulse">▌</span></div>
+      </div>
+    </div>
+
+    <!-- Modules -->
+    <div class="relative z-10 max-w-6xl mx-auto px-6 pb-20">
+      <div class="grid md:grid-cols-3 gap-4">
+        <div class="rounded-lg border border-zinc-800 bg-zinc-950 p-6 font-mono">
+          <div class="text-xs text-emerald-400 mb-2">module/cleaning</div>
+          <h3 class="text-lg font-bold mb-1">Клининг <span class="text-[10px] text-emerald-400">[OK]</span></h3>
+          <p class="text-sm text-zinc-400 font-sans">Заказы на уборку, выезды, услуги по часам и площади.</p>
+        </div>
+        <div class="rounded-lg border border-zinc-800 bg-zinc-950 p-6 font-mono">
+          <div class="text-xs text-amber-400 mb-2">module/beauty</div>
+          <h3 class="text-lg font-bold mb-1">Бьюти <span class="text-[10px] text-amber-400">[BUILDING]</span></h3>
+          <p class="text-sm text-zinc-400 font-sans">Запись клиентов к мастерам, расписание.</p>
+        </div>
+        <div class="rounded-lg border border-zinc-800 bg-zinc-950 p-6 font-mono">
+          <div class="text-xs text-amber-400 mb-2">module/banket</div>
+          <h3 class="text-lg font-bold mb-1">Банкеты <span class="text-[10px] text-amber-400">[BUILDING]</span></h3>
+          <p class="text-sm text-zinc-400 font-sans">События, гости, депозиты, многодневные брони.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============================================================ -->
+<!-- VARIANT 4: APPLE-PREMIUM (огромная типографика, чёрный фон, bento) -->
+<!-- ============================================================ -->
+<section id="v4" class="variant">
+  <div class="dark bg-zinc-950 text-zinc-50 min-h-screen">
+    <header class="border-b border-zinc-900/50">
+      <div class="max-w-7xl mx-auto px-8 h-14 flex items-center justify-between text-xs">
+        <div class="flex items-center gap-1 font-medium tracking-wider">
+          <svg class="size-4" viewBox="0 0 24 24" fill="currentColor"><path d="M13 2L3 14h7l-1 8 10-12h-7z"/></svg>
+          EZZE
+        </div>
+        <nav class="hidden md:flex items-center gap-8 text-zinc-400">
+          <a class="hover:text-white" href="#">Платформа</a>
+          <a class="hover:text-white" href="#">Модули</a>
+          <a class="hover:text-white" href="#">Цены</a>
+          <a class="hover:text-white" href="#">Поддержка</a>
+        </nav>
+        <div class="flex items-center gap-4">
+          <a class="text-zinc-400 hover:text-white" href="#">Войти</a>
+        </div>
+      </div>
+    </header>
+
+    <!-- Massive hero -->
+    <div class="max-w-6xl mx-auto px-8 pt-32 pb-24 text-center">
+      <h1 class="text-6xl md:text-8xl font-bold tracking-tighter leading-[0.95]">
+        Сервисный бизнес.<br/>
+        <span class="text-zinc-500">Переосмыслен.</span>
+      </h1>
+      <p class="mt-8 text-xl md:text-2xl text-zinc-400 max-w-2xl mx-auto font-light">
+        Одна платформа для всего. Подключите модуль и работайте.
+      </p>
+      <div class="mt-12 flex items-center justify-center gap-4 text-sm">
+        <a class="bg-blue-500 text-white px-6 py-3 rounded-full font-medium hover:bg-blue-600 transition" href="#">Попробовать ›</a>
+        <a class="text-blue-400 hover:underline" href="#">Узнать больше ›</a>
+      </div>
+    </div>
+
+    <!-- Bento grid -->
+    <div class="max-w-7xl mx-auto px-8 pb-24">
+      <div class="grid grid-cols-1 md:grid-cols-6 gap-4 auto-rows-[200px]">
+        <!-- Cleaning — большой -->
+        <div class="md:col-span-4 md:row-span-2 rounded-3xl bg-gradient-to-br from-sky-600 to-blue-700 p-8 apple-card flex flex-col justify-between">
+          <div class="flex items-center gap-2 text-xs uppercase tracking-wider text-sky-200">
+            <span class="size-1.5 rounded-full bg-white"></span> Доступен
+          </div>
+          <div>
+            <h3 class="text-4xl font-bold mb-2">Клининг</h3>
+            <p class="text-sky-100 max-w-md">Заказы на уборку, выезды, услуги по часам и площади. Команда, расписание, аналитика.</p>
+            <a class="inline-block mt-4 text-sm font-medium underline hover:no-underline" href="#">Попробовать →</a>
+          </div>
+        </div>
+
+        <!-- Beauty -->
+        <div class="md:col-span-2 rounded-3xl bg-gradient-to-br from-pink-600 to-fuchsia-700 p-6 apple-card flex flex-col justify-between">
+          <div class="text-xs uppercase tracking-wider text-pink-200">Q3 2026</div>
+          <div>
+            <h3 class="text-2xl font-bold">Бьюти</h3>
+            <p class="text-sm text-pink-100 mt-1">Записи мастеров, бронирование</p>
+          </div>
+        </div>
+
+        <!-- Banket -->
+        <div class="md:col-span-2 rounded-3xl bg-gradient-to-br from-purple-600 to-indigo-700 p-6 apple-card flex flex-col justify-between">
+          <div class="text-xs uppercase tracking-wider text-purple-200">Q4 2026</div>
+          <div>
+            <h3 class="text-2xl font-bold">Банкеты</h3>
+            <p class="text-sm text-purple-100 mt-1">События, гости, депозиты</p>
+          </div>
+        </div>
+
+        <!-- Stats -->
+        <div class="md:col-span-2 rounded-3xl bg-zinc-900 p-6 apple-card flex flex-col justify-center">
+          <div class="text-5xl font-bold">99.9%</div>
+          <div class="text-zinc-500 text-sm mt-1">Uptime</div>
+        </div>
+        <div class="md:col-span-2 rounded-3xl bg-zinc-900 p-6 apple-card flex flex-col justify-center">
+          <div class="text-5xl font-bold">3</div>
+          <div class="text-zinc-500 text-sm mt-1">Языка из коробки</div>
+        </div>
+        <div class="md:col-span-2 rounded-3xl bg-zinc-900 p-6 apple-card flex flex-col justify-center">
+          <div class="text-5xl font-bold">5 мин</div>
+          <div class="text-zinc-500 text-sm mt-1">До первого заказа</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============================================================ -->
+<!-- VARIANT 5: COSMOS-PLAYFUL (яркие цвета, hand-drawn, fun) -->
+<!-- ============================================================ -->
+<section id="v5" class="variant">
+  <div class="bg-amber-50 text-zinc-900 min-h-screen relative overflow-hidden">
+    <div class="absolute inset-0 bg-mesh-warm opacity-40 pointer-events-none"></div>
+
+    <header class="relative z-10">
+      <div class="max-w-6xl mx-auto px-6 h-16 flex items-center justify-between">
+        <div class="flex items-center gap-2 font-bold text-lg">
+          <div class="size-8 rounded-xl bg-orange-500 text-white flex items-center justify-center pop">⚡</div>
+          Ezze
+        </div>
+        <nav class="hidden md:flex items-center gap-6 text-sm font-medium">
+          <a class="hover:text-orange-600" href="#">Что умеем</a>
+          <a class="hover:text-orange-600" href="#">Модули</a>
+          <a class="hover:text-orange-600" href="#">Сколько стоит</a>
+        </nav>
+        <div class="flex items-center gap-2 text-sm">
+          <a class="text-zinc-700 px-3 py-1.5" href="#">Войти</a>
+          <a class="bg-zinc-900 text-amber-300 px-4 py-2 rounded-xl font-bold pop hover:translate-x-[-1px] hover:translate-y-[-1px] transition" href="#">Поехали →</a>
+        </div>
+      </div>
+    </header>
+
+    <div class="relative z-10 max-w-6xl mx-auto px-6 pt-16 pb-24">
+      <div class="text-center max-w-3xl mx-auto">
+        <div class="inline-flex items-center gap-2 text-sm font-bold px-4 py-1.5 rounded-full bg-yellow-300 text-zinc-900 mb-6 pop">
+          ✨ Без программистов · 5 минут · Готово
+        </div>
+        <h1 class="text-5xl md:text-7xl font-black tracking-tight leading-[1.05]">
+          Бизнес, в котором<br/>
+          <span class="squiggle">не теряется</span> ни клиент,<br/>
+          ни рубль.
+        </h1>
+        <p class="mt-6 text-xl text-zinc-700 max-w-xl mx-auto">
+          Клиенты, заказы, команда, тарифы — всё в одном окне. Без таблиц и блокнотиков.
+        </p>
+        <div class="mt-8 flex items-center justify-center gap-3 flex-wrap">
+          <a class="bg-orange-500 text-white px-6 py-3 rounded-xl font-bold pop hover:translate-x-[-1px] hover:translate-y-[-1px] transition" href="#">Попробовать бесплатно</a>
+          <a class="bg-white text-zinc-900 px-6 py-3 rounded-xl font-bold border-2 border-zinc-900" href="#">Посмотреть видео</a>
+        </div>
+      </div>
+
+      <!-- Sticker module cards -->
+      <div class="mt-20 grid md:grid-cols-3 gap-5">
+        <div class="bg-sky-300 rounded-2xl p-6 pop -rotate-2 hover:rotate-0 transition border-2 border-zinc-900">
+          <div class="text-4xl mb-3">🧹</div>
+          <h3 class="font-black text-xl mb-1">Клининг</h3>
+          <span class="inline-block text-xs font-bold bg-emerald-400 text-zinc-900 px-2 py-0.5 rounded mb-2">ГОТОВ</span>
+          <p class="text-sm text-zinc-800">Заказы на уборку, выезды, услуги по часам и площади.</p>
+        </div>
+        <div class="bg-pink-300 rounded-2xl p-6 pop rotate-1 hover:rotate-0 transition border-2 border-zinc-900">
+          <div class="text-4xl mb-3">💅</div>
+          <h3 class="font-black text-xl mb-1">Бьюти</h3>
+          <span class="inline-block text-xs font-bold bg-amber-300 text-zinc-900 px-2 py-0.5 rounded mb-2">ОСЕНЬЮ</span>
+          <p class="text-sm text-zinc-800">Запись клиентов к мастерам, расписание.</p>
+        </div>
+        <div class="bg-purple-300 rounded-2xl p-6 pop -rotate-1 hover:rotate-0 transition border-2 border-zinc-900">
+          <div class="text-4xl mb-3">🎉</div>
+          <h3 class="font-black text-xl mb-1">Банкеты</h3>
+          <span class="inline-block text-xs font-bold bg-amber-300 text-zinc-900 px-2 py-0.5 rounded mb-2">ЗИМОЙ</span>
+          <p class="text-sm text-zinc-800">События, гости, депозиты, многодневные брони.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<script>
+  document.querySelectorAll('.picker-btn').forEach(btn => {
+    btn.addEventListener('click', () => {
+      document.querySelectorAll('.picker-btn').forEach(b => b.classList.remove('active'));
+      btn.classList.add('active');
+      const target = btn.dataset.target;
+      document.querySelectorAll('.variant').forEach(s => s.classList.toggle('active', s.id === target));
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+    });
+  });
+</script>
+
+</body>
+</html>

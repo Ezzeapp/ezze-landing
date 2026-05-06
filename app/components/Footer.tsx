@@ -4,7 +4,7 @@ import { Zap } from "lucide-react";
 import { Suspense, useEffect, useState } from "react";
 import { useSearchParams } from "next/navigation";
 import { type Lang } from "../lib/i18n";
-import { tr } from "../lib/content";
+import { tr, type ContentDict } from "../lib/content";
 import { MODULES } from "../lib/modules";
 
 function FooterInner() {
@@ -21,37 +21,29 @@ function FooterInner() {
   const year = new Date().getFullYear();
 
   return (
-    <footer className="border-t border-gray-100 dark:border-gray-800 mt-24">
-      <div className="max-w-6xl mx-auto px-4 py-12 grid gap-8 md:grid-cols-4 text-sm">
-        <div className="space-y-3 md:col-span-2">
-          <Link
-            href="/"
-            className="flex items-center gap-2 font-bold text-xl text-indigo-600 dark:text-indigo-400"
-          >
-            <Zap size={22} />
+    <footer className="border-t border-zinc-200 dark:border-zinc-800 mt-24 bg-zinc-50 dark:bg-zinc-950">
+      <div className="max-w-6xl mx-auto px-6 py-12 grid gap-10 md:grid-cols-12 text-sm">
+        <div className="space-y-3 md:col-span-5">
+          <Link href="/" className="flex items-center gap-2 font-semibold text-lg">
+            <Zap size={20} className="text-violet-600 dark:text-violet-400" />
             Ezze
           </Link>
-          <p className="text-gray-600 dark:text-gray-400 max-w-sm">
+          <p className="text-zinc-600 dark:text-zinc-400 max-w-sm">
             {t.footer_tagline}
           </p>
         </div>
 
-        <div className="space-y-2">
-          <div className="font-semibold text-gray-900 dark:text-gray-100">
+        <div className="space-y-3 md:col-span-3">
+          <div className="font-semibold text-zinc-900 dark:text-zinc-100">
             {t.footer_modules}
           </div>
-          <ul className="space-y-1.5 text-gray-600 dark:text-gray-400">
+          <ul className="space-y-1.5 text-zinc-600 dark:text-zinc-400">
             {MODULES.map((m) => (
               <li key={m.slug}>
-                <Link
-                  href={`/#modules`}
-                  className="hover:text-indigo-600 dark:hover:text-indigo-400 transition-colors"
-                >
-                  {t[`module_${m.slug}_title` as keyof typeof t]}
+                <Link href={`/#modules`} className="hover:text-zinc-900 dark:hover:text-white transition">
+                  {t[`module_${m.slug}_title` as keyof ContentDict]}
                   {m.status === "soon" && (
-                    <span className="ml-2 text-[10px] uppercase text-gray-400">
-                      soon
-                    </span>
+                    <span className="ml-2 text-[10px] uppercase text-zinc-400">soon</span>
                   )}
                 </Link>
               </li>
@@ -59,32 +51,28 @@ function FooterInner() {
           </ul>
         </div>
 
-        <div className="space-y-2">
-          <div className="font-semibold text-gray-900 dark:text-gray-100">
+        <div className="space-y-3 md:col-span-2">
+          <div className="font-semibold text-zinc-900 dark:text-zinc-100">
             {t.footer_company}
           </div>
-          <ul className="space-y-1.5 text-gray-600 dark:text-gray-400">
-            <li>
-              <Link
-                href="/#faq"
-                className="hover:text-indigo-600 dark:hover:text-indigo-400 transition-colors"
-              >
-                {t.footer_about}
-              </Link>
-            </li>
-            <li>
-              <a
-                href="mailto:hello@ezze.site"
-                className="hover:text-indigo-600 dark:hover:text-indigo-400 transition-colors"
-              >
-                {t.footer_contacts}
-              </a>
-            </li>
+          <ul className="space-y-1.5 text-zinc-600 dark:text-zinc-400">
+            <li><Link href="/#faq" className="hover:text-zinc-900 dark:hover:text-white transition">{t.footer_about}</Link></li>
+            <li><a href="mailto:hello@ezze.site" className="hover:text-zinc-900 dark:hover:text-white transition">{t.footer_contacts}</a></li>
+          </ul>
+        </div>
+
+        <div className="space-y-3 md:col-span-2">
+          <div className="font-semibold text-zinc-900 dark:text-zinc-100">
+            {t.footer_legal}
+          </div>
+          <ul className="space-y-1.5 text-zinc-600 dark:text-zinc-400">
+            <li><Link href="#" className="hover:text-zinc-900 dark:hover:text-white transition">{t.footer_privacy}</Link></li>
+            <li><Link href="#" className="hover:text-zinc-900 dark:hover:text-white transition">{t.footer_terms}</Link></li>
           </ul>
         </div>
       </div>
-      <div className="border-t border-gray-100 dark:border-gray-800">
-        <div className="max-w-6xl mx-auto px-4 py-4 text-xs text-gray-500 dark:text-gray-500 flex justify-between flex-wrap gap-2">
+      <div className="border-t border-zinc-200 dark:border-zinc-800">
+        <div className="max-w-6xl mx-auto px-6 py-4 text-xs text-zinc-500 flex justify-between flex-wrap gap-2">
           <span>© {year} Ezze. {t.footer_rights}.</span>
           <span>hello@ezze.site</span>
         </div>
