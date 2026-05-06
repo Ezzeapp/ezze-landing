@@ -1,8 +1,11 @@
-import {
-  Scissors, Wrench, WashingMachine, Stethoscope, Leaf, GraduationCap,
-  UtensilsCrossed, CalendarDays, Building2, Car, Hammer, ShoppingBag,
-} from "lucide-react";
+// Backward-compat shim. The new homepage uses lib/modules.ts directly;
+// this file is kept only because legacy components ([slug]/page.tsx,
+// HomeContent.tsx, etc.) still import PRODUCTS / STATS. Those legacy
+// pages are not part of the new build target.
+
 import type { LucideIcon } from "lucide-react";
+import { Sparkles } from "lucide-react";
+import { MODULES } from "./modules";
 
 export interface Product {
   slug: string;
@@ -16,131 +19,16 @@ export interface Product {
   comingSoon?: boolean;
 }
 
-export const PRODUCTS: Product[] = [
-  {
-    slug: "beauty",
-    name: "Ezze Beauty",
-    description: "Салоны красоты, парикмахеры, косметологи и мастера",
-    icon: Scissors, iconName: "Scissors",
-    color: "from-pink-500 to-purple-600",
-    url: "https://beauty.ezze.site",
-    features: ["Онлайн-запись", "Клиентская база", "Расписание", "Статистика"],
-  },
-  {
-    slug: "workshop",
-    name: "Ezze Workshop",
-    description: "Ремонтные мастерские, сервисные центры, умельцы",
-    icon: Wrench, iconName: "Wrench",
-    color: "from-blue-500 to-cyan-600",
-    url: "https://workshop.ezze.site",
-    features: ["Приём заказов", "Трекинг статуса", "SMS-уведомления", "Склад"],
-    comingSoon: true,
-  },
-  {
-    slug: "clinic",
-    name: "Ezze Clinic",
-    description: "Медицинские клиники, лаборатории и аптеки",
-    icon: Stethoscope, iconName: "Stethoscope",
-    color: "from-green-500 to-teal-600",
-    url: "https://clinic.ezze.site",
-    features: ["Электронная карта", "Запись к врачу", "Лаборатория", "Аптека"],
-    comingSoon: true,
-  },
-  {
-    slug: "farm",
-    name: "Ezze Farm",
-    description: "Управление сельскохозяйственным бизнесом",
-    icon: Leaf, iconName: "Leaf",
-    color: "from-yellow-500 to-orange-600",
-    url: "https://farm.ezze.site",
-    features: ["Учёт урожая", "Склад", "Продажи", "Аналитика"],
-    comingSoon: true,
-  },
-  {
-    slug: "edu",
-    name: "Ezze Edu",
-    description: "Учебные центры, школы и онлайн-курсы",
-    icon: GraduationCap, iconName: "GraduationCap",
-    color: "from-indigo-500 to-blue-600",
-    url: "https://edu.ezze.site",
-    features: ["Расписание", "Ученики", "Оплата", "Прогресс"],
-    comingSoon: true,
-  },
-  {
-    slug: "food",
-    name: "Ezze Food",
-    description: "Кафе, рестораны и службы доставки еды",
-    icon: UtensilsCrossed, iconName: "UtensilsCrossed",
-    color: "from-red-500 to-orange-600",
-    url: "https://food.ezze.site",
-    features: ["Меню", "Заказы", "Доставка", "Столики"],
-    comingSoon: true,
-  },
-  {
-    slug: "event",
-    name: "Ezze Event",
-    description: "Мероприятия, организация событий и концертов",
-    icon: CalendarDays, iconName: "CalendarDays",
-    color: "from-violet-500 to-purple-600",
-    url: "https://event.ezze.site",
-    features: ["Расписание", "Бронирование", "Гости", "Уведомления"],
-    comingSoon: true,
-  },
-  {
-    slug: "hotel",
-    name: "Ezze Hotel",
-    description: "Управление гостиницами, хостелами и апартаментами",
-    icon: Building2, iconName: "Building2",
-    color: "from-sky-500 to-blue-600",
-    url: "https://hotel.ezze.site",
-    features: ["Бронирование", "Управление номерами", "Клиенты", "Аналитика"],
-    comingSoon: true,
-  },
-  {
-    slug: "transport",
-    name: "Ezze Transport",
-    description: "Автопарки, службы такси и грузоперевозок",
-    icon: Car, iconName: "Car",
-    color: "from-amber-500 to-orange-600",
-    url: "https://transport.ezze.site",
-    features: ["Маршруты", "Водители", "Заказы", "GPS"],
-    comingSoon: true,
-  },
-  {
-    slug: "build",
-    name: "Ezze Build",
-    description: "Строительные компании и ремонтные бригады",
-    icon: Hammer, iconName: "Hammer",
-    color: "from-stone-500 to-gray-600",
-    url: "https://build.ezze.site",
-    features: ["Проекты", "Сметы", "Материалы", "Команда"],
-    comingSoon: true,
-  },
-  {
-    slug: "trade",
-    name: "Ezze Trade",
-    description: "Розничная и оптовая торговля, магазины и склады",
-    icon: ShoppingBag, iconName: "ShoppingBag",
-    color: "from-emerald-500 to-green-600",
-    url: "https://trade.ezze.site",
-    features: ["Товары", "Продажи", "Склад", "Аналитика"],
-    comingSoon: true,
-  },
-  {
-    slug: "cleaning",
-    name: "Ezze Cleaning",
-    description: "Химчистки, прачечные, чистка ковров и одежды",
-    icon: WashingMachine, iconName: "WashingMachine",
-    color: "from-cyan-500 to-blue-600",
-    url: "https://cleaning.ezze.site",
-    features: ["Приём заказов", "Статус заказа", "Уведомления", "Склад"],
-    comingSoon: true,
-  },
-];
+export const PRODUCTS: Product[] = MODULES.map((m) => ({
+  slug: m.slug,
+  name: m.slug,
+  description: "",
+  icon: m.icon ?? Sparkles,
+  iconName: m.iconName ?? "Sparkles",
+  color: m.accent,
+  url: "https://app.ezze.site",
+  features: [],
+  comingSoon: m.status === "soon",
+}));
 
-export const STATS = [
-  { value: "5 000+", label: "Мастеров и специалистов" },
-  { value: "50 000+", label: "Записей в месяц" },
-  { value: "9", label: "Языков интерфейса" },
-  { value: "12", label: "Продуктов в экосистеме" },
-];
+export const STATS: { label: string; value: string }[] = [];
