@@ -1,7 +1,8 @@
 import type { LucideIcon } from "lucide-react";
-import { Sparkles, Scissors, UtensilsCrossed } from "lucide-react";
+import { Sparkles, Scissors, UtensilsCrossed, Boxes, Wrench } from "lucide-react";
 
 export type ModuleStatus = "available" | "soon";
+export type PlanTier = "free" | "pro" | "pro_plus" | "business";
 
 export interface ModulePlan {
   price: number;
@@ -9,15 +10,47 @@ export interface ModulePlan {
 }
 
 export interface AppModule {
-  slug: "cleaning" | "beauty" | "banket";
+  slug: "cleaning" | "beauty" | "rental" | "service_center" | "banket";
   status: ModuleStatus;
   accent: string;
   icon: LucideIcon;
   release?: string;
-  plans: {
-    free: ModulePlan;
-    pro: ModulePlan;
-    business: ModulePlan;
+  plans: Record<PlanTier, ModulePlan>;
+}
+
+// Стандартные лимиты для cleaning/beauty/rental/service_center
+// (унифицированы в миграции 0006_unify_plans_and_defaults).
+const STANDARD_LIMITS = {
+  free: {
+    ru: "50 заказов/мес · 1 филиал · 2 сотрудника · 100 клиентов",
+    en: "50 orders/mo · 1 branch · 2 staff · 100 clients",
+    uz: "50 buyurtma/oy · 1 filial · 2 xodim · 100 mijoz",
+  },
+  pro: {
+    ru: "500 заказов/мес · 3 филиала · 6 сотрудников · 3 000 клиентов",
+    en: "500 orders/mo · 3 branches · 6 staff · 3,000 clients",
+    uz: "500 buyurtma/oy · 3 filial · 6 xodim · 3 000 mijoz",
+  },
+  pro_plus: {
+    ru: "2 000 заказов/мес · 8 филиалов · 35 сотрудников · 20 000 клиентов",
+    en: "2,000 orders/mo · 8 branches · 35 staff · 20,000 clients",
+    uz: "2 000 buyurtma/oy · 8 filial · 35 xodim · 20 000 mijoz",
+  },
+  business: {
+    ru: "Безлимит · API · приоритетная поддержка",
+    en: "Unlimited · API · priority support",
+    uz: "Cheksiz · API · ustuvor qo'llab-quvvatlash",
+  },
+};
+
+const STANDARD_PRICES = { free: 0, pro: 199000, pro_plus: 399000, business: 899000 };
+
+function standardPlans(): AppModule["plans"] {
+  return {
+    free: { price: STANDARD_PRICES.free, limits: STANDARD_LIMITS.free },
+    pro: { price: STANDARD_PRICES.pro, limits: STANDARD_LIMITS.pro },
+    pro_plus: { price: STANDARD_PRICES.pro_plus, limits: STANDARD_LIMITS.pro_plus },
+    business: { price: STANDARD_PRICES.business, limits: STANDARD_LIMITS.business },
   };
 }
 
@@ -27,95 +60,65 @@ export const MODULES: AppModule[] = [
     status: "available",
     accent: "#0ea5e9",
     icon: Sparkles,
-    plans: {
-      free: {
-        price: 0,
-        limits: {
-          ru: "20 заказов/мес · 1 филиал · 3 сотрудника",
-          en: "20 orders/mo · 1 branch · 3 staff",
-          uz: "20 buyurtma/oy · 1 filial · 3 xodim",
-        },
-      },
-      pro: {
-        price: 290000,
-        limits: {
-          ru: "500 заказов/мес · 5 филиалов · 20 сотрудников",
-          en: "500 orders/mo · 5 branches · 20 staff",
-          uz: "500 buyurtma/oy · 5 filial · 20 xodim",
-        },
-      },
-      business: {
-        price: 990000,
-        limits: {
-          ru: "Без лимитов · API · приоритет поддержки",
-          en: "Unlimited · API · priority support",
-          uz: "Cheksiz · API · ustuvor qo'llab-quvvatlash",
-        },
-      },
-    },
+    plans: standardPlans(),
   },
   {
     slug: "beauty",
-    status: "soon",
+    status: "available",
     accent: "#ec4899",
     icon: Scissors,
-    release: "Q3 2026",
-    plans: {
-      free: {
-        price: 0,
-        limits: {
-          ru: "30 записей/мес · 2 мастера",
-          en: "30 bookings/mo · 2 staff",
-          uz: "30 yozuv/oy · 2 usta",
-        },
-      },
-      pro: {
-        price: 290000,
-        limits: {
-          ru: "Без лимитов · мастер-расписание · онлайн-запись",
-          en: "Unlimited · staff scheduling · online booking",
-          uz: "Cheksiz · usta jadvali · onlayn yozuv",
-        },
-      },
-      business: {
-        price: 990000,
-        limits: {
-          ru: "Несколько салонов · API · депозиты",
-          en: "Multi-salon · API · deposits",
-          uz: "Bir necha salon · API · depozitlar",
-        },
-      },
-    },
+    plans: standardPlans(),
+  },
+  {
+    slug: "rental",
+    status: "available",
+    accent: "#f59e0b",
+    icon: Boxes,
+    plans: standardPlans(),
+  },
+  {
+    slug: "service_center",
+    status: "available",
+    accent: "#3b82f6",
+    icon: Wrench,
+    plans: standardPlans(),
   },
   {
     slug: "banket",
-    status: "soon",
+    status: "available",
     accent: "#a855f7",
     icon: UtensilsCrossed,
-    release: "Q4 2026",
     plans: {
       free: {
         price: 0,
         limits: {
-          ru: "5 событий/мес · 1 площадка",
-          en: "5 events/mo · 1 venue",
-          uz: "5 tadbir/oy · 1 zal",
+          ru: "5 событий/мес · 1 зал · 3 сотрудника",
+          en: "5 events/mo · 1 venue · 3 staff",
+          uz: "5 tadbir/oy · 1 zal · 3 xodim",
         },
       },
       pro: {
         price: 490000,
         limits: {
-          ru: "Без лимитов · sit-план · депозиты",
-          en: "Unlimited · seating plan · deposits",
-          uz: "Cheksiz · joylashuv rejasi · depozitlar",
+          ru: "50 событий/мес · 2 зала · 10 сотрудников · sit-план · депозиты",
+          en: "50 events/mo · 2 venues · 10 staff · seating plan · deposits",
+          uz: "50 tadbir/oy · 2 zal · 10 xodim · joylashuv rejasi · depozitlar",
+        },
+      },
+      pro_plus: {
+        price: 790000,
+        limits: {
+          ru: "100 событий/мес · 4 зала · 20 сотрудников · меню по гостям",
+          en: "100 events/mo · 4 venues · 20 staff · per-guest menu",
+          uz: "100 tadbir/oy · 4 zal · 20 xodim · mehmonlar bo'yicha menyu",
         },
       },
       business: {
         price: 1490000,
         limits: {
-          ru: "Несколько площадок · API · CRM-интеграции",
-          en: "Multi-venue · API · CRM integrations",
-          uz: "Bir necha zal · API · CRM integratsiyalari",
+          ru: "Безлимит · API · CRM-интеграции · приоритет",
+          en: "Unlimited · API · CRM integrations · priority",
+          uz: "Cheksiz · API · CRM integratsiyalar · ustuvorlik",
         },
       },
     },

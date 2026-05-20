@@ -6,20 +6,24 @@ import {
   Calendar,
   Check,
   ChevronDown,
+  CreditCard,
   Globe2,
   MapPin,
-  Moon,
+  Package,
   Phone,
+  Send,
   Sparkles,
+  Tag,
   User,
   Users,
+  Wallet,
   Zap,
 } from "lucide-react";
 import Header from "./components/Header";
 import Footer from "./components/Footer";
 import { type Lang, registerUrl, APP_URL } from "./lib/i18n";
 import { tr, type ContentDict } from "./lib/content";
-import { MODULES } from "./lib/modules";
+import { MODULES, type PlanTier } from "./lib/modules";
 
 function HomeInner() {
   const searchParams = useSearchParams();
@@ -95,16 +99,20 @@ function Hero({ t }: { t: ContentDict; lang: Lang }) {
 
           <div className="mt-10 flex items-center gap-8 text-xs text-zinc-500 dark:text-zinc-500">
             <div>
-              <strong className="block text-2xl font-bold text-zinc-900 dark:text-white">99.9%</strong>
-              uptime
+              <strong className="block text-2xl font-bold text-zinc-900 dark:text-white">5</strong>
+              {t.hero_stat_modules}
             </div>
             <div>
               <strong className="block text-2xl font-bold text-zinc-900 dark:text-white">5 мин</strong>
-              запуск
+              {t.hero_stat_launch}
             </div>
             <div>
               <strong className="block text-2xl font-bold text-zinc-900 dark:text-white">3</strong>
-              языка
+              {t.hero_stat_languages}
+            </div>
+            <div>
+              <strong className="block text-2xl font-bold text-zinc-900 dark:text-white">99.9%</strong>
+              {t.hero_stat_uptime}
             </div>
           </div>
         </div>
@@ -120,7 +128,6 @@ function ProductMockup({ t: _t }: { t: ContentDict }) {
     <div className="relative">
       <div className="absolute -inset-6 bg-gradient-to-tr from-violet-200/40 via-fuchsia-200/30 to-indigo-200/40 dark:from-violet-900/30 dark:via-fuchsia-900/20 dark:to-indigo-900/30 blur-2xl rounded-3xl pointer-events-none" />
       <div className="relative rounded-2xl border border-zinc-200 dark:border-zinc-800 bg-white dark:bg-zinc-950 shadow-2xl shadow-violet-500/10 dark:shadow-violet-500/20 overflow-hidden transform md:rotate-1 hover:rotate-0 transition-transform duration-500">
-        {/* window chrome */}
         <div className="flex items-center gap-1.5 px-4 py-3 border-b border-zinc-100 dark:border-zinc-900">
           <span className="size-2.5 rounded-full bg-rose-400" />
           <span className="size-2.5 rounded-full bg-amber-400" />
@@ -129,7 +136,6 @@ function ProductMockup({ t: _t }: { t: ContentDict }) {
             app.ezze.site/orders
           </span>
         </div>
-        {/* content */}
         <div className="p-4 space-y-2">
           <div className="flex items-center gap-3 p-2.5 rounded-lg bg-emerald-50 dark:bg-emerald-950/40 border border-emerald-100 dark:border-emerald-900/50">
             <span className="size-1.5 rounded-full bg-emerald-500" />
@@ -204,7 +210,7 @@ function ProductMockup({ t: _t }: { t: ContentDict }) {
 }
 
 /* ------------------------------------------------------------------ */
-/* Modules — 3 soft-shadow cards                                       */
+/* Modules — 5 cards (3+2 grid on lg)                                  */
 /* ------------------------------------------------------------------ */
 function Modules({ t }: { t: ContentDict }) {
   return (
@@ -225,7 +231,7 @@ function Modules({ t }: { t: ContentDict }) {
           </p>
         </div>
 
-        <div className="grid md:grid-cols-3 gap-5">
+        <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-5">
           {MODULES.map((m) => {
             const Icon = m.icon;
             const titleKey = `module_${m.slug}_title` as keyof ContentDict;
@@ -248,7 +254,7 @@ function Modules({ t }: { t: ContentDict }) {
                 >
                   <Icon size={22} className="text-white" />
                 </div>
-                <div className="flex items-center gap-2 mb-1">
+                <div className="flex items-center gap-2 mb-1 flex-wrap">
                   <h3 className="text-xl font-bold text-zinc-900 dark:text-white">
                     {t[titleKey]}
                   </h3>
@@ -300,22 +306,35 @@ function Features({ t }: { t: ContentDict }) {
     Icon: typeof Sparkles,
     title: string,
     desc: string,
-    extra = ""
-  ) => (
-    <div
-      className={`rounded-2xl border border-zinc-200 dark:border-zinc-800 bg-white dark:bg-zinc-950 p-6 transition hover:shadow-lg hover:shadow-zinc-900/5 dark:hover:shadow-black/20 hover:-translate-y-0.5 ${extra}`}
-    >
-      <div className="size-9 rounded-lg bg-violet-100 dark:bg-violet-950/40 text-violet-600 dark:text-violet-400 flex items-center justify-center mb-4">
-        <Icon size={18} />
+    extra = "",
+    accent = "violet"
+  ) => {
+    const tone =
+      accent === "fuchsia"
+        ? "bg-fuchsia-100 dark:bg-fuchsia-950/40 text-fuchsia-600 dark:text-fuchsia-400"
+        : accent === "amber"
+        ? "bg-amber-100 dark:bg-amber-950/40 text-amber-600 dark:text-amber-400"
+        : accent === "emerald"
+        ? "bg-emerald-100 dark:bg-emerald-950/40 text-emerald-600 dark:text-emerald-400"
+        : accent === "sky"
+        ? "bg-sky-100 dark:bg-sky-950/40 text-sky-600 dark:text-sky-400"
+        : "bg-violet-100 dark:bg-violet-950/40 text-violet-600 dark:text-violet-400";
+    return (
+      <div
+        className={`rounded-2xl border border-zinc-200 dark:border-zinc-800 bg-white dark:bg-zinc-950 p-6 transition hover:shadow-lg hover:shadow-zinc-900/5 dark:hover:shadow-black/20 hover:-translate-y-0.5 ${extra}`}
+      >
+        <div className={`size-9 rounded-lg ${tone} flex items-center justify-center mb-4`}>
+          <Icon size={18} />
+        </div>
+        <h3 className="font-semibold text-zinc-900 dark:text-white mb-1.5">
+          {title}
+        </h3>
+        <p className="text-sm text-zinc-600 dark:text-zinc-400 leading-relaxed">
+          {desc}
+        </p>
       </div>
-      <h3 className="font-semibold text-zinc-900 dark:text-white mb-1.5">
-        {title}
-      </h3>
-      <p className="text-sm text-zinc-600 dark:text-zinc-400 leading-relaxed">
-        {desc}
-      </p>
-    </div>
-  );
+    );
+  };
 
   return (
     <section
@@ -337,7 +356,7 @@ function Features({ t }: { t: ContentDict }) {
 
         {/* Bento — 12 col grid, mixed sizes */}
         <div className="grid md:grid-cols-12 gap-4">
-          {/* Big feature: Realtime — spans 2 rows on the left */}
+          {/* Big: Realtime + TG demo */}
           <div className="md:col-span-7 rounded-2xl border border-zinc-200 dark:border-zinc-800 bg-white dark:bg-zinc-950 p-7 relative overflow-hidden hover:shadow-xl hover:shadow-violet-500/10 transition">
             <div className="absolute -right-8 -top-8 size-40 rounded-full bg-gradient-to-br from-violet-200/60 to-fuchsia-200/60 dark:from-violet-800/30 dark:to-fuchsia-800/30 blur-2xl pointer-events-none" />
             <div className="size-10 rounded-lg bg-violet-600 text-white flex items-center justify-center mb-4">
@@ -349,7 +368,6 @@ function Features({ t }: { t: ContentDict }) {
             <p className="text-sm text-zinc-600 dark:text-zinc-400 max-w-md mb-6">
               {t.feat_realtime_desc}
             </p>
-            {/* mini live demo */}
             <div className="space-y-1.5 max-w-sm">
               <div className="flex items-center gap-2 px-3 py-2 rounded-lg bg-zinc-50 dark:bg-zinc-900 text-xs">
                 <span className="size-1.5 rounded-full bg-emerald-500 animate-pulse" />
@@ -375,16 +393,47 @@ function Features({ t }: { t: ContentDict }) {
             </div>
           </div>
 
-          {/* Calendar */}
+          {/* Telegram bot card */}
+          <div className="md:col-span-5 rounded-2xl border border-zinc-200 dark:border-zinc-800 bg-white dark:bg-zinc-950 p-7 hover:shadow-lg transition relative overflow-hidden">
+            <div className="absolute -right-6 -bottom-6 size-32 rounded-full bg-gradient-to-br from-sky-200/60 to-blue-200/60 dark:from-sky-800/30 dark:to-blue-800/30 blur-2xl pointer-events-none" />
+            <div className="size-10 rounded-lg bg-sky-500 text-white flex items-center justify-center mb-4">
+              <Send size={20} />
+            </div>
+            <h3 className="text-xl font-bold text-zinc-900 dark:text-white mb-2">
+              {t.feat_telegram_title}
+            </h3>
+            <p className="text-sm text-zinc-600 dark:text-zinc-400 mb-5">
+              {t.feat_telegram_desc}
+            </p>
+            {/* TG bubble */}
+            <div className="relative max-w-xs">
+              <div className="rounded-2xl rounded-bl-sm bg-sky-50 dark:bg-sky-950/40 border border-sky-100 dark:border-sky-900/50 px-3 py-2 text-xs text-zinc-800 dark:text-zinc-200">
+                <div className="font-semibold text-sky-700 dark:text-sky-300 mb-0.5">
+                  Ваш заказ #142
+                </div>
+                <div>Статус: «В работе» · 16:00</div>
+                <div className="mt-2 flex gap-1.5">
+                  <span className="text-[10px] px-2 py-0.5 rounded bg-white dark:bg-zinc-900 border border-sky-200 dark:border-sky-800 text-sky-700 dark:text-sky-300">
+                    Отменить
+                  </span>
+                  <span className="text-[10px] px-2 py-0.5 rounded bg-white dark:bg-zinc-900 border border-sky-200 dark:border-sky-800 text-sky-700 dark:text-sky-300">
+                    Оценить ★
+                  </span>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          {/* Online booking */}
           <div className="md:col-span-5 rounded-2xl border border-zinc-200 dark:border-zinc-800 bg-white dark:bg-zinc-950 p-7 hover:shadow-lg transition">
             <div className="size-10 rounded-lg bg-fuchsia-100 dark:bg-fuchsia-950/40 text-fuchsia-600 dark:text-fuchsia-400 flex items-center justify-center mb-4">
               <Calendar size={20} />
             </div>
             <h3 className="text-xl font-bold text-zinc-900 dark:text-white mb-2">
-              {t.feat_calendar_title}
+              {t.feat_booking_title}
             </h3>
             <p className="text-sm text-zinc-600 dark:text-zinc-400">
-              {t.feat_calendar_desc}
+              {t.feat_booking_desc}
             </p>
             <div className="mt-5 grid grid-cols-7 gap-1 text-[10px]">
               {Array.from({ length: 7 }).map((_, i) => (
@@ -392,9 +441,9 @@ function Features({ t }: { t: ContentDict }) {
                   key={i}
                   className={`aspect-square rounded flex items-end justify-center pb-1 ${
                     i === 3
-                      ? "bg-violet-500 text-white"
+                      ? "bg-fuchsia-500 text-white"
                       : i === 1 || i === 5
-                      ? "bg-violet-100 dark:bg-violet-950/40 text-violet-700 dark:text-violet-400"
+                      ? "bg-fuchsia-100 dark:bg-fuchsia-950/40 text-fuchsia-700 dark:text-fuchsia-400"
                       : "bg-zinc-100 dark:bg-zinc-900 text-zinc-500"
                   }`}
                 >
@@ -404,10 +453,15 @@ function Features({ t }: { t: ContentDict }) {
             </div>
           </div>
 
+          {featureCard(CreditCard, t.feat_finance_title, t.feat_finance_desc, "md:col-span-7", "emerald")}
+
+          {featureCard(Tag, t.feat_pricing_title, t.feat_pricing_desc, "md:col-span-4", "amber")}
+          {featureCard(Package, t.feat_inventory_title, t.feat_inventory_desc, "md:col-span-4", "sky")}
+          {featureCard(Wallet, t.feat_payroll_title, t.feat_payroll_desc, "md:col-span-4", "emerald")}
+
           {featureCard(Users, t.feat_roles_title, t.feat_roles_desc, "md:col-span-4")}
-          {featureCard(Sparkles, t.feat_multi_title, t.feat_multi_desc, "md:col-span-4")}
-          {featureCard(Globe2, t.feat_i18n_title, t.feat_i18n_desc, "md:col-span-4")}
-          {featureCard(Moon, t.feat_dark_title, t.feat_dark_desc, "md:col-span-12")}
+          {featureCard(Sparkles, t.feat_multi_title, t.feat_multi_desc, "md:col-span-4", "fuchsia")}
+          {featureCard(Globe2, t.feat_i18n_title, t.feat_i18n_desc, "md:col-span-4", "sky")}
         </div>
       </div>
     </section>
@@ -415,7 +469,7 @@ function Features({ t }: { t: ContentDict }) {
 }
 
 /* ------------------------------------------------------------------ */
-/* Pricing — module switcher + 3 plans                                  */
+/* Pricing — module switcher + 4 plans                                  */
 /* ------------------------------------------------------------------ */
 function Pricing({ t, lang }: { t: ContentDict; lang: Lang }) {
   const available = MODULES.filter((m) => m.status === "available");
@@ -426,9 +480,17 @@ function Pricing({ t, lang }: { t: ContentDict; lang: Lang }) {
   const fmt = (n: number) =>
     new Intl.NumberFormat(lang === "uz" ? "uz" : lang === "en" ? "en" : "ru").format(n);
 
-  const plans = [
+  const plans: Array<{
+    key: PlanTier;
+    name: string;
+    price: number;
+    limits: string;
+    cta: string;
+    url: string;
+    popular: boolean;
+  }> = [
     {
-      key: "free" as const,
+      key: "free",
       name: t.plan_free,
       price: active.plans.free.price,
       limits: active.plans.free.limits[lang],
@@ -437,7 +499,7 @@ function Pricing({ t, lang }: { t: ContentDict; lang: Lang }) {
       popular: false,
     },
     {
-      key: "pro" as const,
+      key: "pro",
       name: t.plan_pro,
       price: active.plans.pro.price,
       limits: active.plans.pro.limits[lang],
@@ -446,7 +508,16 @@ function Pricing({ t, lang }: { t: ContentDict; lang: Lang }) {
       popular: true,
     },
     {
-      key: "business" as const,
+      key: "pro_plus",
+      name: t.plan_pro_plus,
+      price: active.plans.pro_plus.price,
+      limits: active.plans.pro_plus.limits[lang],
+      cta: t.plan_choose_pro_plus,
+      url: registerUrl("pro_plus", active.slug),
+      popular: false,
+    },
+    {
+      key: "business",
       name: t.plan_business,
       price: active.plans.business.price,
       limits: active.plans.business.limits[lang],
@@ -500,18 +571,18 @@ function Pricing({ t, lang }: { t: ContentDict; lang: Lang }) {
           })}
         </div>
 
-        <div className="grid gap-5 md:grid-cols-3">
+        <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
           {plans.map((p) => (
             <div
               key={p.key}
-              className={`relative rounded-2xl p-7 flex flex-col bg-white dark:bg-zinc-950 transition ${
+              className={`relative rounded-2xl p-6 flex flex-col bg-white dark:bg-zinc-950 transition ${
                 p.popular
                   ? "border-2 border-violet-500 dark:border-violet-400 shadow-xl shadow-violet-500/15"
                   : "border border-zinc-200 dark:border-zinc-800 hover:shadow-lg"
               }`}
             >
               {p.popular && (
-                <span className="absolute -top-3 left-1/2 -translate-x-1/2 text-xs font-semibold bg-violet-600 text-white px-3 py-1 rounded-full shadow-md">
+                <span className="absolute -top-3 left-1/2 -translate-x-1/2 text-xs font-semibold bg-violet-600 text-white px-3 py-1 rounded-full shadow-md whitespace-nowrap">
                   {t.plan_popular}
                 </span>
               )}
@@ -519,10 +590,10 @@ function Pricing({ t, lang }: { t: ContentDict; lang: Lang }) {
                 {p.name}
               </div>
               <div className="mt-3 flex items-baseline gap-1">
-                <span className="text-4xl font-bold tabular-nums text-zinc-900 dark:text-white">
+                <span className="text-3xl font-bold tabular-nums text-zinc-900 dark:text-white">
                   {p.price === 0 ? "0" : fmt(p.price)}
                 </span>
-                <span className="text-sm text-zinc-500">
+                <span className="text-xs text-zinc-500">
                   {t.plan_currency}
                   {t.plan_per_month}
                 </span>
@@ -572,6 +643,8 @@ function FAQ({
     { q: t.faq_q3, a: t.faq_a3 },
     { q: t.faq_q4, a: t.faq_a4 },
     { q: t.faq_q5, a: t.faq_a5 },
+    { q: t.faq_q6, a: t.faq_a6 },
+    { q: t.faq_q7, a: t.faq_a7 },
   ];
   return (
     <section id="faq" className="py-20 border-t border-zinc-100 dark:border-zinc-900 bg-zinc-50/50 dark:bg-zinc-950/50">
