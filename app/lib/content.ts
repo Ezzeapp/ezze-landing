@@ -46,6 +46,9 @@ export interface ContentDict {
   module_banket_title: string;
   module_banket_desc: string;
   module_banket_meta: string;
+  module_hotel_title: string;
+  module_hotel_desc: string;
+  module_hotel_meta: string;
 
   // Features (bento)
   features_eyebrow: string;
@@ -173,6 +176,11 @@ export const content: Record<Lang, ContentDict> = {
     module_banket_desc:
       "События, гости, площадки, депозиты, многодневные бронирования, меню на гостя, sit-план.",
     module_banket_meta: "Рестораны · Залы торжеств · Корпоративы · Свадьбы",
+
+    module_hotel_title: "Гостиница",
+    module_hotel_desc:
+      "PMS для мини-отелей и гестхаузов. Tape Chart на месяц вперёд, drag-n-drop переселения, план этажа, групповые брони, МВД-отчёт OVIR, dynamic pricing.",
+    module_hotel_meta: "Гестхаузы · Мини-отели · Бутик-отели · Апартаменты",
 
     features_eyebrow: "Что внутри",
     features_title: "Готовые механизмы — не нужно собирать",
@@ -317,6 +325,11 @@ export const content: Record<Lang, ContentDict> = {
       "Events, guests, venues, deposits, multi-day bookings, per-guest menu, seating plan.",
     module_banket_meta: "Restaurants · Halls · Corporate · Weddings",
 
+    module_hotel_title: "Hotel",
+    module_hotel_desc:
+      "PMS for mini-hotels and guesthouses. 30-day Tape Chart, drag-n-drop relocations, floor plan, group bookings, OVIR report, dynamic pricing.",
+    module_hotel_meta: "Guesthouses · Mini-hotels · Boutique · Apartments",
+
     features_eyebrow: "What's inside",
     features_title: "Built-in — no in-house duct tape",
     features_subtitle:
@@ -459,6 +472,11 @@ export const content: Record<Lang, ContentDict> = {
     module_banket_desc:
       "Tadbirlar, mehmonlar, zallar, depozitlar, ko'p kunlik bronlash, mehmon bo'yicha menyu, joylashuv rejasi.",
     module_banket_meta: "Restoranlar · Zallar · Korporativ · To'ylar",
+
+    module_hotel_title: "Mehmonxona",
+    module_hotel_desc:
+      "Mini-mehmonxonalar va gestxauslar uchun PMS. 30-kunlik Tape Chart, drag-n-drop ko'chirish, qavat rejasi, guruh bronlari, OVIR hisoboti, dinamik narxlash.",
+    module_hotel_meta: "Gestxauslar · Mini-mehmonxonalar · Butik · Apartments",
 
     features_eyebrow: "Ichida nima bor",
     features_title: "Tayyor mexanizmlar — yig'ish kerak emas",

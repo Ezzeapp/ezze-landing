@@ -1,5 +1,5 @@
 import type { LucideIcon } from "lucide-react";
-import { Sparkles, Scissors, UtensilsCrossed, Boxes, Wrench } from "lucide-react";
+import { Sparkles, Scissors, UtensilsCrossed, Boxes, Wrench, BedDouble } from "lucide-react";
 
 export type ModuleStatus = "available" | "soon";
 export type PlanTier = "free" | "pro" | "pro_plus" | "business";
@@ -10,7 +10,7 @@ export interface ModulePlan {
 }
 
 export interface AppModule {
-  slug: "cleaning" | "beauty" | "rental" | "service_center" | "banket";
+  slug: "cleaning" | "beauty" | "rental" | "service_center" | "banket" | "hotel";
   status: ModuleStatus;
   accent: string;
   icon: LucideIcon;
@@ -119,6 +119,46 @@ export const MODULES: AppModule[] = [
           ru: "Безлимит · API · CRM-интеграции · приоритет",
           en: "Unlimited · API · CRM integrations · priority",
           uz: "Cheksiz · API · CRM integratsiyalar · ustuvorlik",
+        },
+      },
+    },
+  },
+  {
+    slug: "hotel",
+    status: "available",
+    accent: "#0F766E",
+    icon: BedDouble,
+    plans: {
+      free: {
+        price: 0,
+        limits: {
+          ru: "5 номеров · 30 броней/мес · 1 сотрудник",
+          en: "5 rooms · 30 bookings/mo · 1 staff",
+          uz: "5 xona · 30 bron/oy · 1 xodim",
+        },
+      },
+      pro: {
+        price: 290000,
+        limits: {
+          ru: "25 номеров · ∞ броней · 5 сотрудников · Tape Chart · Floorplan · Housekeeping",
+          en: "25 rooms · ∞ bookings · 5 staff · Tape Chart · Floorplan · Housekeeping",
+          uz: "25 xona · ∞ bron · 5 xodim · Tape Chart · Floorplan · Tozalash",
+        },
+      },
+      pro_plus: {
+        price: 590000,
+        limits: {
+          ru: "80 номеров · Group bookings · Dynamic pricing · МВД-отчёт OVIR · TG-ваучер",
+          en: "80 rooms · Group bookings · Dynamic pricing · OVIR report · TG voucher",
+          uz: "80 xona · Guruh bronlari · Dinamik narxlash · OVIR hisoboti · TG vaucher",
+        },
+      },
+      business: {
+        price: 1190000,
+        limits: {
+          ru: "Безлимит · API · Channel manager (скоро) · приоритетная поддержка",
+          en: "Unlimited · API · Channel manager (soon) · priority support",
+          uz: "Cheksiz · API · Channel manager (tez orada) · ustuvor qo'llab-quvvatlash",
         },
       },
     },
