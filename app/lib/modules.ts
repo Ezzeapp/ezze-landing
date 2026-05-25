@@ -132,33 +132,33 @@ export const MODULES: AppModule[] = [
       free: {
         price: 0,
         limits: {
-          ru: "5 номеров · 30 броней/мес · 1 сотрудник",
-          en: "5 rooms · 30 bookings/mo · 1 staff",
-          uz: "5 xona · 30 bron/oy · 1 xodim",
+          ru: "5 номеров · 30 броней/мес · 2 сотрудника",
+          en: "5 rooms · 30 bookings/mo · 2 staff",
+          uz: "5 xona · 30 bron/oy · 2 xodim",
         },
       },
       pro: {
-        price: 290000,
+        price: 199000,
         limits: {
-          ru: "25 номеров · ∞ броней · 5 сотрудников · Tape Chart · Floorplan · Housekeeping",
-          en: "25 rooms · ∞ bookings · 5 staff · Tape Chart · Floorplan · Housekeeping",
-          uz: "25 xona · ∞ bron · 5 xodim · Tape Chart · Floorplan · Tozalash",
+          ru: "15 номеров · ∞ броней · 6 сотрудников · Tape Chart · Floorplan · Housekeeping",
+          en: "15 rooms · ∞ bookings · 6 staff · Tape Chart · Floorplan · Housekeeping",
+          uz: "15 xona · ∞ bron · 6 xodim · Tape Chart · Floorplan · Tozalash",
         },
       },
       pro_plus: {
-        price: 590000,
+        price: 399000,
         limits: {
-          ru: "80 номеров · Group bookings · Dynamic pricing · МВД-отчёт OVIR · TG-ваучер",
-          en: "80 rooms · Group bookings · Dynamic pricing · OVIR report · TG voucher",
-          uz: "80 xona · Guruh bronlari · Dinamik narxlash · OVIR hisoboti · TG vaucher",
+          ru: "40 номеров · Group bookings · Dynamic pricing · МВД-отчёт OVIR · TG-ваучер",
+          en: "40 rooms · Group bookings · Dynamic pricing · OVIR report · TG voucher",
+          uz: "40 xona · Guruh bronlari · Dinamik narxlash · OVIR hisoboti · TG vaucher",
         },
       },
       business: {
-        price: 1190000,
+        price: 699000,
         limits: {
-          ru: "Безлимит · API · Channel manager (скоро) · приоритетная поддержка",
-          en: "Unlimited · API · Channel manager (soon) · priority support",
-          uz: "Cheksiz · API · Channel manager (tez orada) · ustuvor qo'llab-quvvatlash",
+          ru: "Безлимит номеров · API · Channel manager (скоро) · приоритетная поддержка",
+          en: "Unlimited rooms · API · Channel manager (soon) · priority support",
+          uz: "Cheksiz xona · API · Channel manager (tez orada) · ustuvor qo'llab-quvvatlash",
         },
       },
     },

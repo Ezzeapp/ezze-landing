@@ -179,7 +179,7 @@ export const content: Record<Lang, ContentDict> = {
 
     module_hotel_title: "Гостиница",
     module_hotel_desc:
-      "PMS для мини-отелей и гестхаузов. Tape Chart на месяц вперёд, drag-n-drop переселения, план этажа, групповые брони, МВД-отчёт OVIR, dynamic pricing.",
+      "PMS для мини-отелей и гестхаузов. Tape Chart на месяц вперёд, drag-n-drop переселения, план этажа, групповые брони, МВД-отчёт OVIR, dynamic pricing. Фиксированная цена за весь отель — не платите за каждый номер.",
     module_hotel_meta: "Гестхаузы · Мини-отели · Бутик-отели · Апартаменты",
 
     features_eyebrow: "Что внутри",
@@ -327,7 +327,7 @@ export const content: Record<Lang, ContentDict> = {
 
     module_hotel_title: "Hotel",
     module_hotel_desc:
-      "PMS for mini-hotels and guesthouses. 30-day Tape Chart, drag-n-drop relocations, floor plan, group bookings, OVIR report, dynamic pricing.",
+      "PMS for mini-hotels and guesthouses. 30-day Tape Chart, drag-n-drop relocations, floor plan, group bookings, OVIR report, dynamic pricing. Flat price for the whole hotel — no per-room fees.",
     module_hotel_meta: "Guesthouses · Mini-hotels · Boutique · Apartments",
 
     features_eyebrow: "What's inside",
@@ -475,7 +475,7 @@ export const content: Record<Lang, ContentDict> = {
 
     module_hotel_title: "Mehmonxona",
     module_hotel_desc:
-      "Mini-mehmonxonalar va gestxauslar uchun PMS. 30-kunlik Tape Chart, drag-n-drop ko'chirish, qavat rejasi, guruh bronlari, OVIR hisoboti, dinamik narxlash.",
+      "Mini-mehmonxonalar va gestxauslar uchun PMS. 30-kunlik Tape Chart, drag-n-drop ko'chirish, qavat rejasi, guruh bronlari, OVIR hisoboti, dinamik narxlash. Butun mehmonxona uchun qat'iy narx — har bir xona uchun to'lamaysiz.",
     module_hotel_meta: "Gestxauslar · Mini-mehmonxonalar · Butik · Apartments",
 
     features_eyebrow: "Ichida nima bor",
